@@ -2,10 +2,12 @@ package org.nextgen.model;
 
 import java.util.List;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 
 
 /**
@@ -18,7 +20,12 @@ public class Domain extends BaseEntity {
     public String community;
     public String icon;
     public String tags;
+
     
+    @OneToMany(mappedBy = "domain")
+    public List<LearningTrack> tracks;
+    
+    //@JsonbTransient
     @ManyToMany
     @JoinTable(
     name = "domain_profiles", // name of the join table

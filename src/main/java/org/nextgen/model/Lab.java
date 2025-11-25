@@ -12,7 +12,11 @@ import jakarta.persistence.OneToMany;
 @Entity
 public class Lab extends BaseEntity{
     
+    @Column(nullable = false)
     public String name;
+
+    @Column(nullable = true)
+    public String uuid;
 
     public String description;
     
@@ -44,7 +48,7 @@ public class Lab extends BaseEntity{
     public Integer estimatedTimeMin;
 
     @Column(name = "has_bonus_tasks")
-    public boolean hasBonusTasks;
+    public Boolean hasBonusTasks;
 
     @OneToMany(mappedBy = "lab", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     public List<Asset> assets;

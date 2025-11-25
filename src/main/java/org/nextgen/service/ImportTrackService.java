@@ -74,7 +74,8 @@ public class ImportTrackService {
         LearningTrack track = saveLearningTrack(yamlDTO, dto);
 
         // 7. Process labs + assets
-        saveLabsFromRepo(yamlDTO, cloneDir, track);
+        Path labsPath = cloneDir.resolve(dto.gitPath);
+        saveLabsFromRepo(yamlDTO, labsPath, track);
         
         return track;
     }
@@ -104,12 +105,16 @@ public class ImportTrackService {
                 domainEntity.icon = yamlDTO.icon;
                 domainEntity.persist();
                 LOG.info("Created new domain: " + yamlDTO.domainName);
-            }
+            } else 
+                LOG.info("Found domain: " + yamlDTO.domainName);
         }
 
         // 2. create track entity
+        // enhancement: check for existing track by uuid?
+        // Now, For simplicity, we always create a new track here.
         LearningTrack track = new LearningTrack();
         track.name = yamlDTO.name;
+        track.uuid = yamlDTO.UUID;
         track.description = yamlDTO.description;
         track.icon = yamlDTO.icon;
         track.difficultyLevel = parseDifficulty(yamlDTO.difficultyLevel);
@@ -148,9 +153,11 @@ public class ImportTrackService {
         int order = 0;
         for (TrackYamlDTO.LabYamlDTO l : yaml.labs) {
             order++;
-
+            // enhancement: check for existing track by uuid?
+            // Now, For simplicity, we always create a new track here.
             Lab lab = new Lab();
             lab.name = l.name;
+            lab.uuid = l.UUID;
             lab.description = l.description;
             lab.icon = l.icon;
             lab.difficultyLevel = parseDifficulty(l.difficultyLevel != null ? l.difficultyLevel : yaml.difficultyLevel);
@@ -232,6 +239,7 @@ public class ImportTrackService {
         }
 
         // optionally link labs to track
+        
         track.labs = persistedLabs;
         track.persist(); // update track with labs list if necessary
         LOG.infof("Imported %d labs for track %s", persistedLabs.size(), track.name);

@@ -309,14 +309,55 @@ insert into learning_track (name, description, difficulty_level, estimated_time_
 insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
   ('Vue','Vue',1,180,1);
 
+
+insert into lab(name, description, estimated_time_min, difficulty_level) values 
+  ('HTML Basics','Learn the basics of HTML.',60,0);
+insert into learning_track_labs (learning_track_id, lab_id) values (1,1);  
+insert into lab(name, description, estimated_time_min, difficulty_level) values 
+  ('CSS Basics','Learn the basics of CSS.',60,0);
+insert into learning_track_labs (learning_track_id, lab_id) values (2,2);  
+insert into lab(name, description, estimated_time_min, difficulty_level) values 
+  ('JavaScript Basics','Learn the basics of JavaScript.',90,0);
+insert into learning_track_labs (learning_track_id, lab_id) values (3,3);  
+insert into lab(name, description, estimated_time_min, difficulty_level) values 
+  ('TypeScript Basics','Learn the basics of TypeScript.',90,0);
+insert into learning_track_labs (learning_track_id, lab_id) values (4,4);  
+insert into lab(name, description, estimated_time_min, difficulty_level) values 
+  ('React Basics','Learn the basics of React.',90,0);
+insert into learning_track_labs (learning_track_id, lab_id) values (5,5);  
+insert into lab(name, description, estimated_time_min, difficulty_level) values 
+  ('Next.JS Basics','Learn the basics of Next.JS.',90,0);
+insert into learning_track_labs (learning_track_id, lab_id) values (6,6);  
+insert into lab(name, description, estimated_time_min, difficulty_level) values 
+  ('Bootstrap Basics','Learn the basics of Bootstrap.',90,0);
+insert into learning_track_labs (learning_track_id, lab_id) values (7,7);  
+insert into lab(name, description, estimated_time_min, difficulty_level) values 
+  ('Angular Basics','Learn the basics of Angular.',90,0);
+insert into learning_track_labs (learning_track_id, lab_id) values (8,8);  
+insert into lab(name, description, estimated_time_min, difficulty_level) values 
+  ('Vue Basics','Learn the basics of Vue.',90,0);
+insert into learning_track_labs (learning_track_id, lab_id) values (9,9);
+insert into lab(name, description, estimated_time_min, difficulty_level) values 
+  ('HTML Advanced','Learn advanced HTML topics.',60,0);
+insert into learning_track_labs (learning_track_id, lab_id) values (1,10);
+
+--- also add css basic lab to html  track
+insert into learning_track_labs (learning_track_id, lab_id) values (1,2);
+
 insert into learning_track_profiles (learning_track_id, profile_id) values (1,1);
 insert into learning_track_profiles (learning_track_id, profile_id) values (1,3);
 insert into learning_track_profiles (learning_track_id, profile_id) values (2,1);
 insert into learning_track_profiles (learning_track_id, profile_id) values (2,3);
 
 
-insert into user_tracks (user_id, learning_track_id) values (1,1);
-insert into user_tracks (user_id, learning_track_id) values (1,4);
+-- enroll user 1 in HTML and TypeScript tracks
+insert into user_tracks (user_id, learning_track_id, enrolled ) values (1,1,true);
+insert into user_tracks (user_id, learning_track_id, enrolled ) values (1,4,true);
+-- entry for user lab progress
+insert into user_lab_progress (user_id, track_id, lab_id, completed, startdate, closedate) values (1,1,1,true, CURRENT_DATE-9, CURRENT_DATE-7);
+insert into user_lab_progress (user_id, track_id, lab_id, completed, startdate, closedate) values (1,1,2,false, null, null);
+insert into user_lab_progress (user_id, track_id, lab_id, completed, startdate, closedate) values (1,1,10,false, null, null);
+insert into user_lab_progress (user_id, track_id, lab_id, completed, startdate, closedate) values (1,4,4,false, CURRENT_DATE-2, null);
 -- alter sequence profile_seq restart with 4;
 
 

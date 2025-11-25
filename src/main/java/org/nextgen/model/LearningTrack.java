@@ -6,6 +6,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Column;
 import java.util.List;
 
@@ -25,6 +26,9 @@ public class LearningTrack extends BaseEntity {
     
     @Column(nullable = false)
     public String name;
+
+    @Column(nullable = true)
+    public String uuid;
     
     @Column(columnDefinition = "TEXT")
     public String description;
@@ -42,6 +46,7 @@ public class LearningTrack extends BaseEntity {
 
     public String icon;
 
+    @JsonbTransient
     @ManyToOne
     public Domain domain;
 
@@ -65,7 +70,7 @@ public class LearningTrack extends BaseEntity {
 
     // Many-to-Many relationship with Profile. 
     // Lab is defined as the owning side of this relationship.
-    @ManyToMany
+    @ManyToMany 
     @JoinTable(
         name = "learning_track_labs", // The junction table name
         joinColumns = @JoinColumn(name = "learning_track_id"), // Foreign key column to this entity (LearningTrack)

@@ -3,6 +3,7 @@ package org.nextgen.dto;
 public class ImportLabDTO {
 
     private String name;
+    private String uuid;
     private String description;
     private String icon;
     private String difficultyLevel; // BEGINNER, INTERMEDIATE, ADVANCED
@@ -16,6 +17,12 @@ public class ImportLabDTO {
     // Getters and Setters
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
+    public String getUuid() {
+        return uuid;
+    }
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
     public String getIcon() { return icon; }

@@ -1,5 +1,6 @@
 package org.nextgen.model;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,5 +12,6 @@ public class Asset extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "lab_id")
+    @JsonbTransient
     public Lab lab;
 }

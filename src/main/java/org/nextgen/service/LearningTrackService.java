@@ -6,6 +6,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import org.nextgen.model.LearningTrack;
 
+
 @ApplicationScoped
 public class LearningTrackService {
 
@@ -69,5 +70,9 @@ public class LearningTrackService {
         learningTrack.persist();
         return learningTrack;
     }
+
+    
+
+    
 }
 
