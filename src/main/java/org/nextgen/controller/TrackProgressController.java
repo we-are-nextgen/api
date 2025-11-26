@@ -11,6 +11,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.nextgen.dto.TrackProgressDTO;
+import org.nextgen.model.UserLabProgress;
 import org.nextgen.service.TrackProgressService;
 
 @Path("/progress")
@@ -35,6 +36,16 @@ public class TrackProgressController {
             @QueryParam("email") String email,
             @QueryParam("trackId") Long trackId) {
         return progressService.getProgressByEmail(email, trackId);
+    }
+
+
+    @POST
+    @Path("/{trackId}/enroll")
+    public UserLabProgress enroll(
+        @PathParam("trackId") Long trackId,
+        @QueryParam("email") String email
+    ) {
+        return progressService.enroll(email, trackId);
     }
 
     @POST

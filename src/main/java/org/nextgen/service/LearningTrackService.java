@@ -3,6 +3,7 @@ package org.nextgen.service;
 import java.util.List;
 import java.util.HashMap;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 
 import org.nextgen.model.LearningTrack;
 
@@ -34,7 +35,7 @@ public class LearningTrackService {
     }
 
     
-
+    @Transactional
     public LearningTrack updateLearningTrack(Long id, String name, String description, String icon) {
         LearningTrack learningTrack = LearningTrack.findById(id);
         if (learningTrack != null) {
@@ -46,6 +47,7 @@ public class LearningTrackService {
         return learningTrack;
     }
 
+    @Transactional
     public LearningTrack deleteLearningTrack(Long id) {
         LearningTrack learningTrack = LearningTrack.findById(id);
         if (learningTrack != null) {
@@ -61,7 +63,8 @@ public class LearningTrackService {
     public Long getCount() {
         return LearningTrack.count();
     }
-
+    
+    @Transactional
     public LearningTrack createLearningTrack(String name, String description, String icon) {
         LearningTrack learningTrack = new LearningTrack();
         learningTrack.name = name;

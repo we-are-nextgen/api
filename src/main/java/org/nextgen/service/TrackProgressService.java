@@ -1,6 +1,8 @@
 package org.nextgen.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -16,6 +18,17 @@ import org.nextgen.model.UserTrack;
 
 @ApplicationScoped
 public class TrackProgressService {
+
+    private Long getUserIdByEmail(String email) {
+        ITProfessional user = ITProfessional.find("userId", email).firstResult();
+        if (user != null) {
+            return user.id;
+        }
+        return null;
+    } 
+     private ITProfessional getUserByEmail(String email) {
+        return ITProfessional.find("userId", email).firstResult();
+    }   
 
     @Transactional
     public TrackProgressDTO getProgress(Long userId, Long trackId) {
@@ -67,20 +80,14 @@ public class TrackProgressService {
     }
 
     @Transactional
-    public UserLabProgress markLabCompleted(String email, Long labId) {
-        ITProfessional user = ITProfessional.find("userId", email).firstResult();
-        // handle user not found
-        /*if (user == null) {
-            
-        }*/
-       
-        Long userId = user.id;
+    public UserLabProgress markLabCompleted(String email, Long labId) {        
+        ITProfessional user = getUserByEmail(email);
         Lab lab = Lab.findById(labId);
 
         if (user == null || lab == null)
             throw new IllegalStateException("User or Lab not found.");
 
-        UserLabProgress progress = UserLabProgress.find("user.id = ?1 AND lab.id = ?2", userId, labId)
+        UserLabProgress progress = UserLabProgress.find("user.id = ?1 AND lab.id = ?2", user.id, labId)
                 .firstResult();
 
         if (progress == null) {
@@ -94,6 +101,74 @@ public class TrackProgressService {
         progress.persist();
 
         return progress;
+    }
+
+    public Lab getNextLab(String email, Long trackId) {
+        Long userId = getUserIdByEmail(email);
+        LearningTrack track = LearningTrack.findById(trackId);
+
+        var labs = new ArrayList<>(track.labs);
+        labs.sort(Comparator.comparing(l -> l.sequence));
+
+        for (Lab lab : labs) {
+            boolean done = UserLabProgress.find(
+                    "user.id = ?1 AND lab.id = ?2 AND completed = true",
+                    userId, lab.id
+            ).firstResult() != null;
+
+            if (!done) return lab;
+        }
+
+        return null;
+    }
+
+
+    @Transactional
+    public UserLabProgress enroll(String email, Long trackId) {
+        ITProfessional user  = getUserByEmail(email);
+        LearningTrack track = LearningTrack.findById(trackId);
+        // Check if already enrolled => find any progress row
+        long existingCount = UserLabProgress.count(
+            "user.id = ?1 AND track.id = ?2",
+            user.id, trackId
+        );
+
+        if (existingCount > 0) {
+            return null; // already enrolled
+        }
+        
+        // eroll user
+        UserTrack userTrack = new UserTrack();
+        userTrack.user = user;
+        userTrack.learningTrackId = trackId;
+        userTrack.enrolled = true;
+        userTrack.enrolledAt = LocalDateTime.now();
+        userTrack.persist();
+        // Only create progress for the first lab, if exists
+        if (!track.labs.isEmpty()) {
+            Lab firstLab = track.labs.get(0); // first lab
+            UserLabProgress p = new UserLabProgress();
+            p.user = user;
+            p.lab = firstLab;
+            p.labId = firstLab.id;
+            p.track = track;
+            p.completed = false;
+            p.startdate = LocalDateTime.now();
+            p.persist();
+            return p;
+        }
+        return null;
+
+        // Create progress per lab
+        /*for (Lab lab : track.labs) {
+            UserLabProgress p = new UserLabProgress();
+            p.user = user;
+            p.lab = lab;
+            p.track = track;
+            p.completed = false;
+            p.startdate = LocalDateTime.now();
+            p.persist();
+        }*/
     }
 
 }

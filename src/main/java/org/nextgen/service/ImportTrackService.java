@@ -75,6 +75,7 @@ public class ImportTrackService {
 
         // 7. Process labs + assets + exercises
         Path labsPath = cloneDir.resolve(dto.gitPath == null ? "" : dto.gitPath);
+        System.out.println("Repo URL: ======== " + dto.gitRepoUrl); // --- IGNORE ---
         saveLabsFromRepo(yamlDTO, labsPath, track);
 
         return track;
@@ -126,7 +127,7 @@ public class ImportTrackService {
 
         // Persist
         track.persist();
-        LOG.infof("Persisted track '%s' (id=%d)", track.name, track.id);
+        //LOG.infof("Persisted track '%s' (id=%d)", track.name, track.id);
 
         return track;
     }
@@ -159,6 +160,7 @@ public class ImportTrackService {
             lab.difficultyLevel = parseDifficulty(l.difficultyLevel != null ? l.difficultyLevel : yaml.difficultyLevel);
             lab.estimatedTimeMin = l.estimatedTimeMin;
             lab.hasBonusTasks = l.hasBonusTasks;
+            lab.sequence = l.sequence != null ? l.sequence : order;
 
             // handle markdown/html content (path or inline)
             if (l.contentMarkdown != null && !l.contentMarkdown.isBlank()) {
@@ -201,7 +203,7 @@ public class ImportTrackService {
 
             // Persist lab first to get its id
             lab.persist();
-            LOG.infof("Persisted lab '%s' (id=%d)", lab.name, lab.id);
+            //LOG.infof("Persisted lab '%s' (id=%d)", lab.name, lab.id);
 
             // assets
             if (l.assets != null && !l.assets.isEmpty()) {
@@ -259,7 +261,7 @@ public class ImportTrackService {
 
                     exercise.persist();
                     savedExercises.add(exercise);
-                    LOG.infof("Persisted exercise '%s' (id=%d) for lab '%s'", exercise.title, exercise.id, lab.name);
+                    //LOG.infof("Persisted exercise '%s' (id=%d) for lab '%s'", exercise.title, exercise.id, lab.name);
                 }
                 lab.exercises = savedExercises;
             }
@@ -270,7 +272,7 @@ public class ImportTrackService {
         // link labs to track and persist
         track.labs = persistedLabs;
         track.persist(); // update track with labs list
-        LOG.infof("Imported %d labs for track %s", persistedLabs.size(), track.name);
+        //LOG.infof("Imported %d labs for track %s", persistedLabs.size(), track.name);
     }
 
 
@@ -308,7 +310,6 @@ public class ImportTrackService {
      */
     private String saveFileToStorage(Path src, Path destBase, String filename) throws IOException {
         Files.createDirectories(destBase);
-
         // keep filename unique by prefixing timestamp
         String safeName = System.currentTimeMillis() + "-" + sanitizeForPath(filename);
         Path dest = destBase.resolve(safeName);

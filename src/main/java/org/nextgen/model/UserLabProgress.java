@@ -25,6 +25,9 @@ public class UserLabProgress extends BaseEntity {
     @JsonbTransient
     public Lab lab;
 
+    @Column(name = "lab_id", insertable=false, updatable=false)
+    public Long labId;
+
     public Boolean completed;
 
     @Column(name = "start_date")
