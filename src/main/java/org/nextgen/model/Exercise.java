@@ -1,5 +1,6 @@
 package org.nextgen.model;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -8,6 +9,7 @@ import jakarta.persistence.ManyToOne;
 public class Exercise extends BaseEntity {
 
     @ManyToOne
+    @JsonbTransient
     public Lab lab;
 
     public String title;

@@ -2,11 +2,13 @@ package org.nextgen.controller;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import org.nextgen.dto.TrackProgressDTO;
 import org.nextgen.service.TrackProgressService;
@@ -32,7 +34,17 @@ public class TrackProgressController {
     public TrackProgressDTO getProgressByEmail(
             @QueryParam("email") String email,
             @QueryParam("trackId") Long trackId) {
-        System.out.println("Received email: " + email + ", trackId: " + trackId);
         return progressService.getProgressByEmail(email, trackId);
+    }
+
+    @POST
+    @Path("/lab/complete/{labId}")
+    public Response markCompleted(
+            @PathParam("labId") long labId,
+            @QueryParam("email") String email
+    ) {
+        System.out.println("Marking lab " + labId + " as completed for user " + email);
+        var updated = progressService.markLabCompleted(email, labId);
+        return Response.ok(updated).build();
     }
 }

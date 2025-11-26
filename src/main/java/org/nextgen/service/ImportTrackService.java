@@ -8,6 +8,7 @@ import org.nextgen.dto.ImportTrackDTO;
 import org.nextgen.dto.importer.TrackYamlDTO;
 import org.nextgen.model.Asset;
 import org.nextgen.model.Domain;
+import org.nextgen.model.Exercise;
 import org.nextgen.model.Lab;
 import org.nextgen.model.LearningTrack;
 
@@ -22,7 +23,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.jboss.logging.Logger;
-
 
 @ApplicationScoped
 public class ImportTrackService {
@@ -73,10 +73,10 @@ public class ImportTrackService {
         // 6. Store LearningTrack in DB
         LearningTrack track = saveLearningTrack(yamlDTO, dto);
 
-        // 7. Process labs + assets
-        Path labsPath = cloneDir.resolve(dto.gitPath);
+        // 7. Process labs + assets + exercises
+        Path labsPath = cloneDir.resolve(dto.gitPath == null ? "" : dto.gitPath);
         saveLabsFromRepo(yamlDTO, labsPath, track);
-        
+
         return track;
     }
 
@@ -94,7 +94,7 @@ public class ImportTrackService {
      * Returns the persisted LearningTrack.
      */
     private LearningTrack saveLearningTrack(TrackYamlDTO yamlDTO, ImportTrackDTO dto) {
-         // 1. find or create domain
+        // 1. find or create domain
         Domain domainEntity = null;
         if (yamlDTO.domainName != null && !yamlDTO.domainName.isBlank()) {
             domainEntity = Domain.find("name", yamlDTO.domainName).firstResult();
@@ -105,13 +105,11 @@ public class ImportTrackService {
                 domainEntity.icon = yamlDTO.icon;
                 domainEntity.persist();
                 LOG.info("Created new domain: " + yamlDTO.domainName);
-            } else 
+            } else
                 LOG.info("Found domain: " + yamlDTO.domainName);
         }
 
         // 2. create track entity
-        // enhancement: check for existing track by uuid?
-        // Now, For simplicity, we always create a new track here.
         LearningTrack track = new LearningTrack();
         track.name = yamlDTO.name;
         track.uuid = yamlDTO.UUID;
@@ -120,8 +118,8 @@ public class ImportTrackService {
         track.difficultyLevel = parseDifficulty(yamlDTO.difficultyLevel);
         track.estimatedTimeMin = yamlDTO.estimatedTimeMin;
         track.rewardPoints = yamlDTO.rewardPoints;
-        
-        track.repoUrl =  dto.gitRepoUrl;
+
+        track.repoUrl = dto.gitRepoUrl;
         track.repoBranch = dto.gitBranch;
         track.repoPath = dto.gitPath;
         track.domain = domainEntity;
@@ -153,8 +151,6 @@ public class ImportTrackService {
         int order = 0;
         for (TrackYamlDTO.LabYamlDTO l : yaml.labs) {
             order++;
-            // enhancement: check for existing track by uuid?
-            // Now, For simplicity, we always create a new track here.
             Lab lab = new Lab();
             lab.name = l.name;
             lab.uuid = l.UUID;
@@ -163,11 +159,9 @@ public class ImportTrackService {
             lab.difficultyLevel = parseDifficulty(l.difficultyLevel != null ? l.difficultyLevel : yaml.difficultyLevel);
             lab.estimatedTimeMin = l.estimatedTimeMin;
             lab.hasBonusTasks = l.hasBonusTasks;
-            //lab.track = track;
 
-            // contentMarkdown: could be inline (starts with '#') or path in repo
+            // handle markdown/html content (path or inline)
             if (l.contentMarkdown != null && !l.contentMarkdown.isBlank()) {
-                // If the YAML points to a path (contains '/', or ends with .md), treat as path
                 if (looksLikePath(l.contentMarkdown)) {
                     Path mdPath = repoRoot.resolve(l.contentMarkdown).normalize();
                     if (Files.exists(mdPath)) {
@@ -178,7 +172,6 @@ public class ImportTrackService {
                         LOG.warn("contentMarkdown path not found: " + mdPath);
                     }
                 } else {
-                    // inline markdown → write to file and store
                     Path tmp = Files.createTempFile("lab-content-", ".md");
                     Files.writeString(tmp, l.contentMarkdown, StandardOpenOption.TRUNCATE_EXISTING);
                     String dest = saveFileToStorage(tmp, trackStorage, "lab-" + order + "-content.md");
@@ -187,7 +180,6 @@ public class ImportTrackService {
                 }
             }
 
-            // contentHtml: similar handling
             if (l.contentHtml != null && !l.contentHtml.isBlank()) {
                 if (looksLikePath(l.contentHtml)) {
                     Path htmlPath = repoRoot.resolve(l.contentHtml).normalize();
@@ -210,7 +202,7 @@ public class ImportTrackService {
             // Persist lab first to get its id
             lab.persist();
             LOG.infof("Persisted lab '%s' (id=%d)", lab.name, lab.id);
-            
+
             // assets
             if (l.assets != null && !l.assets.isEmpty()) {
                 List<Asset> savedAssets = new ArrayList<>();
@@ -235,17 +227,53 @@ public class ImportTrackService {
                 lab.assets = savedAssets;
             }
 
+            // ---- NEW: exercises ----
+            if (l.exercises != null && !l.exercises.isEmpty()) {
+                List<Exercise> savedExercises = new ArrayList<>();
+                for (TrackYamlDTO.ExerciseYamlDTO ex : l.exercises) {
+                    Exercise exercise = new Exercise();
+                    exercise.title = ex.title;
+                    exercise.type = ex.type;
+                    exercise.question = ex.question;
+
+                    // convert options list to JSON string for storage (simple)
+                    if (ex.options != null && !ex.options.isEmpty()) {
+                        // naive JSON array serialization
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("[");
+                        for (int i = 0; i < ex.options.size(); i++) {
+                            String opt = ex.options.get(i).replace("\"", "\\\"");
+                            sb.append("\"").append(opt).append("\"");
+                            if (i < ex.options.size() - 1) sb.append(",");
+                        }
+                        sb.append("]");
+                        exercise.optionsJson = sb.toString();
+                    } else {
+                        exercise.optionsJson = null;
+                    }
+
+                    exercise.correctAnswer = ex.correctAnswer;
+                    exercise.hint = ex.hint;
+                    exercise.points = ex.points != null ? ex.points : 0;
+                    exercise.lab = lab;
+
+                    exercise.persist();
+                    savedExercises.add(exercise);
+                    LOG.infof("Persisted exercise '%s' (id=%d) for lab '%s'", exercise.title, exercise.id, lab.name);
+                }
+                lab.exercises = savedExercises;
+            }
+
             persistedLabs.add(lab);
         }
 
-        // optionally link labs to track
-        
+        // link labs to track and persist
         track.labs = persistedLabs;
-        track.persist(); // update track with labs list if necessary
+        track.persist(); // update track with labs list
         LOG.infof("Imported %d labs for track %s", persistedLabs.size(), track.name);
     }
 
-    
+
     // -----------------------
     // Helper utilities
     // -----------------------
@@ -261,13 +289,15 @@ public class ImportTrackService {
     }
 
     private boolean looksLikePath(String s) {
-        return s.contains("/") || s.endsWith(".md") || s.endsWith(".html") || s.contains(".") ;
+        return s.contains("/") || s.endsWith(".md") || s.endsWith(".html") || s.contains(".");
     }
 
     private String guessTypeFromName(String fileName) {
         String lower = fileName.toLowerCase();
-        if (lower.endsWith(".png") || lower.endsWith(".jpg") || lower.endsWith(".jpeg") || lower.endsWith(".svg")) return "image";
-        if (lower.endsWith(".js") || lower.endsWith(".ts") || lower.endsWith(".py") || lower.endsWith(".java")) return "code";
+        if (lower.endsWith(".png") || lower.endsWith(".jpg") || lower.endsWith(".jpeg") || lower.endsWith(".svg"))
+            return "image";
+        if (lower.endsWith(".js") || lower.endsWith(".ts") || lower.endsWith(".py") || lower.endsWith(".java"))
+            return "code";
         if (lower.endsWith(".pdf")) return "pdf";
         return "file";
     }

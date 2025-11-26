@@ -22,6 +22,8 @@ public class Lab extends BaseEntity{
     
     public String icon;
 
+    public Integer sequence;
+
     @Column(name = "difficulty_level")
     public Difficulty difficultyLevel;
     
@@ -52,5 +54,8 @@ public class Lab extends BaseEntity{
 
     @OneToMany(mappedBy = "lab", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     public List<Asset> assets;
+
+    @OneToMany(mappedBy = "lab", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    public List<Exercise> exercises;
 
 }

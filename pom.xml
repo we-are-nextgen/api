@@ -58,6 +58,7 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-hibernate-orm</artifactId>
         </dependency>
+    
 
         <!-- JGit (stable release that resolves from Maven Central) -->
        <dependency>
@@ -72,6 +73,7 @@
             <artifactId>snakeyaml</artifactId>
             <version>2.2</version>
         </dependency>
+
         
         <dependency>
             <groupId>io.quarkus</groupId>

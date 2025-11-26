@@ -26,6 +26,7 @@ public class TrackYamlDTO {
         public String difficultyLevel;
         public Integer estimatedTimeMin;
         public boolean hasBonusTasks;
+        public Integer sequence;
 
         public String contentMarkdown;
         public String contentHtml;

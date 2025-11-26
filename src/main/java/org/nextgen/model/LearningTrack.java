@@ -5,6 +5,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Column;
@@ -76,6 +77,7 @@ public class LearningTrack extends BaseEntity {
         joinColumns = @JoinColumn(name = "learning_track_id"), // Foreign key column to this entity (LearningTrack)
         inverseJoinColumns = @JoinColumn(name = "lab_id") // Foreign key column to the other entity (Lab)
     )
+    @OrderBy("sequence ASC") 
     public List<Lab> labs;
 
     // Helper method to find labs by difficulty

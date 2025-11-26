@@ -1,5 +1,6 @@
 package org.nextgen.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -7,6 +8,7 @@ import jakarta.transaction.Transactional;
 
 import org.nextgen.dto.TrackProgressDTO;
 import org.nextgen.model.ITProfessional;
+import org.nextgen.model.Lab;
 import org.nextgen.model.LearningTrack;
 import org.nextgen.model.UserLabProgress;
 import org.nextgen.model.UserTrack;
@@ -44,7 +46,12 @@ public class TrackProgressService {
             progress = (completedLabs.size() * 100) / totalLabs;
         }
 
-        return new TrackProgressDTO(enrolled, completedLabs, progress);
+        UserLabProgress labInProgress = UserLabProgress.find(
+        "user.id = ?1 AND track.id = ?2 AND completed = false",
+        userId, trackId
+        ).firstResult();
+
+        return new TrackProgressDTO(enrolled, completedLabs, progress, labInProgress != null ? labInProgress.lab.id : Long.valueOf(0) );
     }
 
     @Transactional
@@ -53,10 +60,40 @@ public class TrackProgressService {
 
         ITProfessional user = ITProfessional.find("userId", email).firstResult();
         if (user == null) {
-            return new TrackProgressDTO(false, List.of(), 0);
+            return new TrackProgressDTO(false, List.of(), 0, Long.valueOf(0) );
         }
 
         return getProgress(user.id, trackId);
+    }
+
+    @Transactional
+    public UserLabProgress markLabCompleted(String email, Long labId) {
+        ITProfessional user = ITProfessional.find("userId", email).firstResult();
+        // handle user not found
+        /*if (user == null) {
+            
+        }*/
+       
+        Long userId = user.id;
+        Lab lab = Lab.findById(labId);
+
+        if (user == null || lab == null)
+            throw new IllegalStateException("User or Lab not found.");
+
+        UserLabProgress progress = UserLabProgress.find("user.id = ?1 AND lab.id = ?2", userId, labId)
+                .firstResult();
+
+        if (progress == null) {
+            progress = new UserLabProgress();
+            progress.user = user;
+            progress.lab = lab;
+        }
+
+        progress.completed = true;
+        progress.completedAt = LocalDateTime.now();
+        progress.persist();
+
+        return progress;
     }
 
 }
