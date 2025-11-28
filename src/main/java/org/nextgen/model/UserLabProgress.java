@@ -6,6 +6,7 @@ import java.util.List;
 import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -20,6 +21,9 @@ public class UserLabProgress extends BaseEntity {
     @ManyToOne
     @JsonbTransient
     public LearningTrack track;
+
+    @Column(name = "track_id", insertable=false, updatable=false)
+    public Long learninTrackId;
 
     @ManyToOne
     @JsonbTransient

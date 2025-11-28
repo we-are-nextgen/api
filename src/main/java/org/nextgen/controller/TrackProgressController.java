@@ -52,10 +52,11 @@ public class TrackProgressController {
     @Path("/lab/complete/{labId}")
     public Response markCompleted(
             @PathParam("labId") long labId,
+            @QueryParam("trackId") long trackId,
             @QueryParam("email") String email
     ) {
         System.out.println("Marking lab " + labId + " as completed for user " + email);
-        var updated = progressService.markLabCompleted(email, labId);
+        var updated = progressService.markLabCompleted(email, labId, trackId);
         return Response.ok(updated).build();
     }
 }

@@ -56,6 +56,6 @@ public class Lab extends BaseEntity{
     public List<Asset> assets;
 
     @OneToMany(mappedBy = "lab", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    public List<Exercise> exercises;    
+    public List<Exercise> exercises;
 
 }

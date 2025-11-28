@@ -75,7 +75,7 @@ public class ImportTrackService {
 
         // 7. Process labs + assets + exercises
         Path labsPath = cloneDir.resolve(dto.gitPath == null ? "" : dto.gitPath);
-        System.out.println("Repo URL: ======== " + dto.gitRepoUrl); // --- IGNORE ---
+        // System.out.println("Repo URL: ======== " + dto.gitRepoUrl); // --- IGNORE ---
         saveLabsFromRepo(yamlDTO, labsPath, track);
 
         return track;
@@ -105,7 +105,7 @@ public class ImportTrackService {
                 domainEntity.description = yamlDTO.description != null ? yamlDTO.description : null;
                 domainEntity.icon = yamlDTO.icon;
                 domainEntity.persist();
-                LOG.info("Created new domain: " + yamlDTO.domainName);
+                //LOG.info("Created new domain: " + yamlDTO.domainName);
             } else
                 LOG.info("Found domain: " + yamlDTO.domainName);
         }
@@ -169,7 +169,7 @@ public class ImportTrackService {
                     if (Files.exists(mdPath)) {
                         String dest = saveFileToStorage(mdPath, trackStorage, "lab-" + order + "-content.md");
                         lab.contentMarkdownUrl = dest;
-                        LOG.info("Saved contentMarkdown for lab '" + lab.name + "' -> " + dest);
+                        //LOG.info("Saved contentMarkdown for lab '" + lab.name + "' -> " + dest);
                     } else {
                         LOG.warn("contentMarkdown path not found: " + mdPath);
                     }
@@ -188,7 +188,7 @@ public class ImportTrackService {
                     if (Files.exists(htmlPath)) {
                         String dest = saveFileToStorage(htmlPath, trackStorage, "lab-" + order + "-content.html");
                         lab.contentHtmlUrl = dest;
-                        LOG.info("Saved contentHtml for lab '" + lab.name + "' -> " + dest);
+                        //LOG.info("Saved contentHtml for lab '" + lab.name + "' -> " + dest);
                     } else {
                         LOG.warn("contentHtml path not found: " + htmlPath);
                     }
@@ -224,7 +224,7 @@ public class ImportTrackService {
                     a.lab = lab;
                     a.persist();
                     savedAssets.add(a);
-                    LOG.info("Saved asset: " + destUrl);
+                    //LOG.info("Saved asset: " + destUrl);
                 }
                 lab.assets = savedAssets;
             }

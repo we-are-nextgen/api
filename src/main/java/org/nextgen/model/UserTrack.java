@@ -37,6 +37,8 @@ public class UserTrack extends BaseEntity {
     // Extra column!
     public Boolean enrolled;
 
+    public Boolean completed;
+
     @Column(name = "enrolled_at")
     public LocalDateTime enrolledAt;
 

@@ -42,4 +42,17 @@ public class ITProfessional extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     public List<UserTrack> userTracks;
     
+    
+    public static Long getUserIdByEmail(String email) {
+        ITProfessional user = ITProfessional.find("userId", email).firstResult();
+        if (user != null) {
+            return user.id;
+        }
+        return null;
+    } 
+
+    public static ITProfessional getUserByEmail(String email) {
+        return ITProfessional.find("userId", email).firstResult();
+    }  
+        
 }

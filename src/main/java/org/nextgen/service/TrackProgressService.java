@@ -19,17 +19,6 @@ import org.nextgen.model.UserTrack;
 @ApplicationScoped
 public class TrackProgressService {
 
-    private Long getUserIdByEmail(String email) {
-        ITProfessional user = ITProfessional.find("userId", email).firstResult();
-        if (user != null) {
-            return user.id;
-        }
-        return null;
-    } 
-     private ITProfessional getUserByEmail(String email) {
-        return ITProfessional.find("userId", email).firstResult();
-    }   
-
     @Transactional
     public TrackProgressDTO getProgress(Long userId, Long trackId) {
 
@@ -38,6 +27,7 @@ public class TrackProgressService {
                 .firstResult();
 
         Boolean enrolled = userTrack != null && userTrack.enrolled !=null && userTrack.enrolled;
+        Boolean completed = userTrack != null && userTrack.completed !=null && userTrack.completed;
 
         // 2️⃣ Get all labs of track
         LearningTrack track = LearningTrack.findById(trackId);
@@ -64,7 +54,8 @@ public class TrackProgressService {
         userId, trackId
         ).firstResult();
 
-        return new TrackProgressDTO(enrolled, completedLabs, progress, labInProgress != null ? labInProgress.lab.id : Long.valueOf(0) );
+        return new TrackProgressDTO(enrolled, completedLabs, progress, 
+            labInProgress != null ? labInProgress.lab.id : Long.valueOf(0),completed );
     }
 
     @Transactional
@@ -73,15 +64,15 @@ public class TrackProgressService {
 
         ITProfessional user = ITProfessional.find("userId", email).firstResult();
         if (user == null) {
-            return new TrackProgressDTO(false, List.of(), 0, Long.valueOf(0) );
+            return new TrackProgressDTO(false, List.of(), 0, Long.valueOf(0),false );
         }
 
         return getProgress(user.id, trackId);
     }
 
     @Transactional
-    public UserLabProgress markLabCompleted(String email, Long labId) {        
-        ITProfessional user = getUserByEmail(email);
+    public UserLabProgress markLabCompleted(String email, Long labId, Long trackId) {        
+        ITProfessional user = ITProfessional.getUserByEmail(email);
         Lab lab = Lab.findById(labId);
 
         if (user == null || lab == null)
@@ -99,12 +90,33 @@ public class TrackProgressService {
         progress.completed = true;
         progress.completedAt = LocalDateTime.now();
         progress.persist();
+        
+        // automatically assign tgh next lab
+        Lab nextLab = getNextLab(email,trackId);
+        if(nextLab!=null){
+            UserLabProgress nextLabprogress = new UserLabProgress();
+            nextLabprogress.user = user;
+            nextLabprogress.lab = nextLab;
+            nextLabprogress.completed = false;
+            nextLabprogress.track = progress.track;
+            nextLabprogress.startdate = LocalDateTime.now();
+            nextLabprogress.persist();
+        } else 
+        {
+            // TODO: handle track compelition and update credits and rewards
+            UserTrack userTrack = UserTrack.find("user.id = ?1 AND track.id = ?2", user.id, trackId)
+                .firstResult();
+            userTrack.finishedAt = LocalDateTime.now();
+            userTrack.completed = true;
+            userTrack.persist();
+        }
+
 
         return progress;
     }
 
     public Lab getNextLab(String email, Long trackId) {
-        Long userId = getUserIdByEmail(email);
+        Long userId = ITProfessional.getUserIdByEmail(email);
         LearningTrack track = LearningTrack.findById(trackId);
 
         var labs = new ArrayList<>(track.labs);
@@ -125,7 +137,7 @@ public class TrackProgressService {
 
     @Transactional
     public UserLabProgress enroll(String email, Long trackId) {
-        ITProfessional user  = getUserByEmail(email);
+        ITProfessional user  = ITProfessional.getUserByEmail(email);
         LearningTrack track = LearningTrack.findById(trackId);
         // Check if already enrolled => find any progress row
         long existingCount = UserLabProgress.count(
