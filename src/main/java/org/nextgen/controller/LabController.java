@@ -60,22 +60,8 @@ public class LabController {
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
     public Response gradeLab(LabSubmissionDTO dto) {
-        Lab lab = Lab.findById(dto.labId);
-        if (lab == null) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity("Lab not found").build();
-        }
-
-        Map<Long, Integer> result = gradingService.grade(lab, dto.submissions);
-
-        int total = lab.exercises.stream().mapToInt(e -> e.points).sum();
-        int earned = result.values().stream().mapToInt(i -> i).sum();
-
-        return Response.ok(Map.of(
-                "earned", earned,
-                "total", total,
-                "details", result
-        )).build(); 
+        Map<Object, Object> result = gradingService.grade(dto);
+        return Response.ok(result).build(); 
     }
 
 }
