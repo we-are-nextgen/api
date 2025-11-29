@@ -21,6 +21,9 @@ public class ExerciseSubmission extends BaseEntity {
     @JsonbTransient
     public Exercise exercise;
 
+    @Column(name = "exercise_id", insertable=false, updatable=false)
+    public Long exerciseId;
+
     @Column(columnDefinition = "TEXT")
     public String answer;
 

@@ -40,6 +40,8 @@ public class AutoGradingService {
                 ExerciseSubmissionDTO exerciseSubmissionDTO = new ExerciseSubmissionDTO();
                 exerciseSubmissionDTO.answer = prevSubmission==null?null:prevSubmission.answer;
                 exerciseSubmissionDTO.score = prevSubmission==null?0:prevSubmission.earnedPoints;
+                exerciseSubmissionDTO.exerciseId = ex.id;
+                exerciseSubmissionDTO.question = ex.title;
                 results.put(ex.id, exerciseSubmissionDTO);
                 earned += exerciseSubmissionDTO.score;
                 //results.put(ex.id, );
@@ -78,6 +80,8 @@ public class AutoGradingService {
             ExerciseSubmissionDTO exerciseSubmissionDTO = new ExerciseSubmissionDTO();
             exerciseSubmissionDTO.answer = sub.answer;
             exerciseSubmissionDTO.score = score;
+            exerciseSubmissionDTO.exerciseId = ex.id;
+            exerciseSubmissionDTO.question = ex.title;
             results.put(ex.id, exerciseSubmissionDTO);
             //results.put(ex.id, score);
         }
