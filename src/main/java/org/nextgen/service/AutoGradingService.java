@@ -26,16 +26,23 @@ public class AutoGradingService {
         ITProfessional user = ITProfessional.getUserByEmail(labSubmissionDTO.userId);
         List<ExerciseSubmissionDTO> submissions = labSubmissionDTO.submissions;
 
-        Map<Long, Integer> results = new HashMap<>();
+        Map<Long, ExerciseSubmissionDTO> results = new HashMap<>();
 
         for (Exercise ex : lab.exercises) {
             ExerciseSubmissionDTO sub = submissions.stream()
                     .filter(s -> s.exerciseId.equals(ex.id))
                     .findFirst()
                     .orElse(null);
-
+            
             if (sub == null) {
-                results.put(ex.id, 0);
+                // check prev submission 
+                ExerciseSubmission prevSubmission = ExerciseSubmission.findByUserAndExercise(user, ex);
+                ExerciseSubmissionDTO exerciseSubmissionDTO = new ExerciseSubmissionDTO();
+                exerciseSubmissionDTO.answer = prevSubmission==null?null:prevSubmission.answer;
+                exerciseSubmissionDTO.score = prevSubmission==null?0:prevSubmission.earnedPoints;
+                results.put(ex.id, exerciseSubmissionDTO);
+                earned += exerciseSubmissionDTO.score;
+                //results.put(ex.id, );
                 continue;
             }
             
@@ -48,7 +55,7 @@ public class AutoGradingService {
             };
             earned += score;
             // Store the score for this exercise
-            
+
             ExerciseSubmission submission = ExerciseSubmission.findByUserAndExercise(user, ex);
 
             if (submission != null) {
@@ -68,7 +75,11 @@ public class AutoGradingService {
                 submission.persist();
             };
             // Here you would typically save submissionRecord to the database   
-            results.put(ex.id, score);
+            ExerciseSubmissionDTO exerciseSubmissionDTO = new ExerciseSubmissionDTO();
+            exerciseSubmissionDTO.answer = sub.answer;
+            exerciseSubmissionDTO.score = score;
+            results.put(ex.id, exerciseSubmissionDTO);
+            //results.put(ex.id, score);
         }
         return 
             Map.of(
