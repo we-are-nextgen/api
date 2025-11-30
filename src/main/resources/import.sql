@@ -280,3 +280,4 @@ insert into user_badges (user_id,badge_id,awardedAt) values (1,5,'8/01/2025');
 insert into user_badges (user_id,badge_id,awardedAt) values (1,6,'9/13/2025');
 insert into user_badges (user_id,badge_id,awardedAt) values (1,7,'10/02/2025');
 
+ 
