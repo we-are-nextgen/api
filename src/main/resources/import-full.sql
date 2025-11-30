@@ -280,3 +280,84 @@ insert into user_badges (user_id,badge_id,awardedAt) values (1,5,'8/01/2025');
 insert into user_badges (user_id,badge_id,awardedAt) values (1,6,'9/13/2025');
 insert into user_badges (user_id,badge_id,awardedAt) values (1,7,'10/02/2025');
 
+
+-- labs
+insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
+  ('HTML','HTML',0,120,1);
+
+insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
+  ('CSS','CSS',0,120,1);  
+
+insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
+  ('JavaScript','JavaScript is a programming language that allows web pages to be dynamic. It is an interpreted language, which means that it doesn''t need to be compiled: instead the interpreter (such as a web browser) will parse the code and turn it into code that their machine can run - suitable for creating dynamic websites that can run on any browser on any computer!',0,120,1);
+
+insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
+  ('TypeScript','TypeScript (TS) is a superset of JavaScript (JS), created at Microsoft in response to frustration developing large-scale applications in JS. In a large JS project, knowing what properties your own objects have, what arguments your functions take (and what type they need to be) can become difficult. Similarly, since there is no ability to intelligently inspect JS code, when you include a package (like from npm), you have to keep the documentation up so you know what methods are available and what arguments they take. TS solves these issues. It is currently an open-source project hosted on Github. It supports tools for any browser as well as Node, for any host, on any OS. TS compiles to readable, standards-based JavaScript.',1,180,1);
+
+insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
+  ('React','React.',1,180,1);
+
+insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
+  ('Next.JS','Next.JS',2,180,1);
+
+insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
+  ('Bootstrap','Bootstrap',1,180,1);
+
+insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
+  ('Angular','Angular',2,180,1);
+
+insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
+  ('Vue','Vue',1,180,1);
+
+
+insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
+  ('HTML Basics','Learn the basics of HTML.',60,0,1);
+insert into learning_track_labs (learning_track_id, lab_id) values (1,1);  
+insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
+  ('CSS Basics','Learn the basics of CSS.',60,0,1);
+insert into learning_track_labs (learning_track_id, lab_id) values (2,2);  
+insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
+  ('JavaScript Basics','Learn the basics of JavaScript.',90,0,1);
+insert into learning_track_labs (learning_track_id, lab_id) values (3,3);  
+insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
+  ('TypeScript Basics','Learn the basics of TypeScript.',90,0,1);
+insert into learning_track_labs (learning_track_id, lab_id) values (4,4);  
+insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
+  ('React Basics','Learn the basics of React.',90,0,1);
+insert into learning_track_labs (learning_track_id, lab_id) values (5,5);  
+insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
+  ('Next.JS Basics','Learn the basics of Next.JS.',90,0,1);
+insert into learning_track_labs (learning_track_id, lab_id) values (6,6);  
+insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
+  ('Bootstrap Basics','Learn the basics of Bootstrap.',90,0,1);
+insert into learning_track_labs (learning_track_id, lab_id) values (7,7);  
+insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
+  ('Angular Basics','Learn the basics of Angular.',90,0,1);
+insert into learning_track_labs (learning_track_id, lab_id) values (8,8);  
+insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
+  ('Vue Basics','Learn the basics of Vue.',90,0,1);
+insert into learning_track_labs (learning_track_id, lab_id) values (9,9);
+insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
+  ('HTML Advanced','Learn advanced HTML topics.',60,0,2);
+insert into learning_track_labs (learning_track_id, lab_id) values (1,10);
+
+--- also add css basic lab to html  track
+insert into learning_track_labs (learning_track_id, lab_id) values (1,2);
+
+insert into learning_track_profiles (learning_track_id, profile_id) values (1,1);
+insert into learning_track_profiles (learning_track_id, profile_id) values (1,3);
+insert into learning_track_profiles (learning_track_id, profile_id) values (2,1);
+insert into learning_track_profiles (learning_track_id, profile_id) values (2,3);
+
+
+-- enroll user 1 in HTML and TypeScript tracks
+insert into user_tracks (user_id, learning_track_id, enrolled ) values (1,1,true);
+insert into user_tracks (user_id, learning_track_id, enrolled ) values (1,4,true);
+-- entry for user lab progress
+insert into user_lab_progress (user_id, track_id, lab_id, completed, start_date, completed_at) values (1,1,1,true, CURRENT_DATE-9, CURRENT_DATE-7);
+insert into user_lab_progress (user_id, track_id, lab_id, completed, start_date, completed_at) values (1,1,2,false, CURRENT_DATE-6, null);
+--insert into user_lab_progress (user_id, track_id, lab_id, completed, start_date, completed_at) values (1,1,10,false, null, null);
+--insert into user_lab_progress (user_id, track_id, lab_id, completed, start_date, completed_at) values (1,4,4,false, CURRENT_DATE-2, null);
+-- alter sequence profile_seq restart with 4;
+
+
