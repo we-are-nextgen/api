@@ -18,6 +18,8 @@ public class Lab extends BaseEntity{
     @Column(nullable = true)
     public String uuid;
 
+    public String language;
+
     public String description;
     
     public String icon;

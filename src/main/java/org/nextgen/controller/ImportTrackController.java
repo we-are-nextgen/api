@@ -5,6 +5,7 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
@@ -32,13 +33,14 @@ public class ImportTrackController {
 
 
     @GET
-    @Path("/test")
-    public LearningTrack importTrack() {
+    @Path("/load/{lab}")
+    public LearningTrack importTrack(@PathParam("lab") String lab) {
         try {
             
             ImportTrackDTO importTrackDTO = new ImportTrackDTO();
             importTrackDTO.gitRepoUrl = "https://github.com/we-are-nextgen/tracks";
-            importTrackDTO.gitPath = "javascript";
+//            importTrackDTO.gitPath = "javascript";
+            importTrackDTO.gitPath = lab;
             importTrackDTO.gitBranch = "main";
             System.out.print(importTrackDTO);
             

@@ -6,6 +6,7 @@ public class ImportLabDTO {
     private String uuid;
     private String description;
     private String icon;
+    private String language;
     private String difficultyLevel; // BEGINNER, INTERMEDIATE, ADVANCED
     private String contentMarkdown;
     private String contentHtml;
@@ -22,6 +23,13 @@ public class ImportLabDTO {
     }
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+    public void setLanguage(String language) {
+        this.language = language;
     }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }

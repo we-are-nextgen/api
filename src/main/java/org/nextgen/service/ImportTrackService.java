@@ -76,7 +76,7 @@ public class ImportTrackService {
         // 7. Process labs + assets + exercises
         Path labsPath = cloneDir.resolve(dto.gitPath == null ? "" : dto.gitPath);
         // System.out.println("Repo URL: ======== " + dto.gitRepoUrl); // --- IGNORE ---
-        saveLabsFromRepo(yamlDTO, labsPath, track);
+        saveLabsFromRepo(yamlDTO, labsPath, track, dto);
 
         return track;
     }
@@ -137,7 +137,7 @@ public class ImportTrackService {
      * repoRoot is the root path of the cloned repo.
      * track is the persisted LearningTrack.
      */
-    private void saveLabsFromRepo(TrackYamlDTO yaml, Path repoRoot, LearningTrack track) throws IOException {
+    private void saveLabsFromRepo(TrackYamlDTO yaml, Path repoRoot, LearningTrack track, ImportTrackDTO dto) throws IOException {
         if (yaml.labs == null || yaml.labs.isEmpty()) {
             LOG.warn("No labs to import for track " + track.name);
             return;
@@ -161,6 +161,7 @@ public class ImportTrackService {
             lab.estimatedTimeMin = l.estimatedTimeMin;
             lab.hasBonusTasks = l.hasBonusTasks;
             lab.sequence = l.sequence != null ? l.sequence : order;
+            lab.language = dto.gitPath; //git path (folder) should reflect language name
 
             // handle markdown/html content (path or inline)
             if (l.contentMarkdown != null && !l.contentMarkdown.isBlank()) {
