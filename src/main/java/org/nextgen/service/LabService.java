@@ -37,7 +37,8 @@ public class LabService {
         UserLabProgress progress = UserLabProgress.find("user.id = ?1 AND lab.id = ?2", user.id, LabId)
                 .firstResult();
         map.put("progress", progress);
-         map.put("exerciseSubmission",ExerciseSubmission.findByUserAndLab(user, lab));
+        map.put("exerciseSubmission",ExerciseSubmission.findByUserAndLab(user, lab));
+        map.put("userId", user.id);
         return map;
     }
 

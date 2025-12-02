@@ -59,7 +59,7 @@ public class LearningTrack extends BaseEntity {
 
     
     // Many-to-Many relationship with Profile. 
-    // Lab is defined as the owning side of this relationship.
+    // Profile is defined as the owning side of this relationship.
     @ManyToMany
     @JoinTable(
         name = "learning_track_profiles", // The junction table name

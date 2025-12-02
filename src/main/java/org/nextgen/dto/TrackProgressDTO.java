@@ -1,15 +1,16 @@
 package org.nextgen.dto;
 
 import java.util.List;
+import java.util.Map;
 
 public class TrackProgressDTO {
     public boolean enrolled;
-    public List<Long> completedLabs;
+    public List<Map<String,Long>> completedLabs;
     public int progress;
     public Long currentLabId;
     public boolean completed;
 
-    public TrackProgressDTO(boolean enrolled, List<Long> completedLabs, int progress, Long currentLabId
+    public TrackProgressDTO(boolean enrolled, List<Map<String,Long>> completedLabs, int progress, Long currentLabId
         ,boolean completed
     ) {
         this.enrolled = enrolled;
@@ -18,5 +19,6 @@ public class TrackProgressDTO {
         this.currentLabId = currentLabId;
         this.completed=completed;
     }
+
     
 }
