@@ -1,6 +1,7 @@
 package org.nextgen.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -97,5 +98,38 @@ public class LearningTrack extends BaseEntity {
     return find("domain.id", domainId)
             .page(page, pageSize)
             .list();
-}
+    }
+
+    /**
+     * Calculates the total earned points across all exercises within a specific Learning Track for a given user.
+     * * @param userId The ID of the ITProfessional user.
+     * @param learningTrackId The ID of the LearningTrack to filter by.
+     * @return The total sum of earned points as a Long.
+     */
+    public static Long findTotalEarnedPointsByTrack(Long userId, Long learningTrackId) {
+        EntityManager em = LearningTrack.getEntityManager();
+        
+        // JPQL Query: SELECT the SUM of earnedPoints
+        String jpql = "SELECT SUM(es.earnedPoints) " +
+                    "FROM LearningTrack lt " +
+                    "JOIN lt.labs l " + // 1. Traverse LearningTrack -> Lab (using the ManyToMany 'labs' collection)
+                    "JOIN l.exercises e " + // 2. Traverse Lab -> Exercise (using the OneToMany 'exercises' collection)
+                    "JOIN ExerciseSubmission es ON es.exercise = e " + // 3. Traverse Exercise -> ExerciseSubmission
+                    "WHERE lt.id = :learningTrackId " + // Filter by the specific Learning Track ID
+                    "AND es.user.id = :userId"; // Filter by the specific user ID
+
+        // Note: The query returns an Object (which is a Long) or null if no submissions exist.
+        Object result = em.createQuery(jpql)
+                        .setParameter("userId", userId)
+                        .setParameter("learningTrackId", learningTrackId)
+                        .getSingleResult();
+
+        // Handle null result (which means no submissions found for the user/track)
+        if (result == null) {
+            return 0L;
+        }
+        
+        // Explicitly cast the result (which is guaranteed to be a Long by SUM)
+        return (Long) result;
+    }
 }
