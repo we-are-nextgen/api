@@ -243,7 +243,7 @@ insert into milestone (id, sequence, name, description, stage_id) values (48, 17
 
 
 
-insert into itprofessional (id, userId, domain_id, stage_id, profile_id) values (1, 'waelibrahim2000@hotmail.com', 1, 2, 1);
+insert into itprofessional (id, userId, domain_id, stage_id, profile_id) values (1, 'waelibrahim2000@hotmail.com', 1, 1, 1);
 insert into user_progress (id, user_id, milestone_id,nextmilestone_id, prevProgress_id, startdate, closedate, status, earned_points) values (
             1, 1, 1, 2, null, CURRENT_DATE-10, CURRENT_DATE-8, 'Completed', 1);
 --insert into user_progress (id, user_id, milestone_id,nextmilestone_id, prevProgress_id, startdate, closedate, status) values (
@@ -284,12 +284,12 @@ insert into badge (name, title, icon, trigger ) values ('Super Contributor','ğŸš
 insert into badge (name, title, icon, trigger ) values ('Top 5% Performer','ğŸŒŸ Top 5% Performer','','Based on journey benchmarking');
 
 insert into user_badges (user_id,badge_id,awardedAt) values (1,1,'1/4/2025');
-insert into user_badges (user_id,badge_id,awardedAt) values (1,2,'5/15/2025');
-insert into user_badges (user_id,badge_id,awardedAt) values (1,3,'6/11/2025');
-insert into user_badges (user_id,badge_id,awardedAt) values (1,4,'7/24/2025');
-insert into user_badges (user_id,badge_id,awardedAt) values (1,5,'8/01/2025');
-insert into user_badges (user_id,badge_id,awardedAt) values (1,6,'9/13/2025');
-insert into user_badges (user_id,badge_id,awardedAt) values (1,7,'10/02/2025');
+--insert into user_badges (user_id,badge_id,awardedAt) values (1,2,'5/15/2025');
+--insert into user_badges (user_id,badge_id,awardedAt) values (1,3,'6/11/2025');
+--insert into user_badges (user_id,badge_id,awardedAt) values (1,4,'7/24/2025');
+--insert into user_badges (user_id,badge_id,awardedAt) values (1,5,'8/01/2025');
+--insert into user_badges (user_id,badge_id,awardedAt) values (1,6,'9/13/2025');
+--insert into user_badges (user_id,badge_id,awardedAt) values (1,7,'10/02/2025');
 
  
 alter sequence Activity_id_seq restart with 20;

@@ -43,6 +43,11 @@ public class ITProfessional extends BaseEntity {
     public List<UserTrack> userTracks;
     
     
+    /**
+     * get ITProfessional id by email
+     * @param email
+     * @return
+     */
     public static Long getUserIdByEmail(String email) {
         ITProfessional user = ITProfessional.find("userId", email).firstResult();
         if (user != null) {
@@ -51,8 +56,23 @@ public class ITProfessional extends BaseEntity {
         return null;
     } 
 
+    /**
+     * get ITProfessional by email
+     * @param email
+     * @return
+     */
     public static ITProfessional getUserByEmail(String email) {
         return ITProfessional.find("userId", email).firstResult();
     }  
+
+
+    /**
+     * get number of ITProfessionals in certain stage
+     * @param stageId
+     * @return
+     */
+    public static long countByStage(Long stageId) {
+        return ITProfessional.count("stage.id", stageId);
+    }
         
 }
