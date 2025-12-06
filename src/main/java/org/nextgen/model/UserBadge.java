@@ -17,7 +17,7 @@ public class UserBadge extends BaseEntity{
         AUTO,
         MANUAL
     }
-    
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonbTransient
@@ -28,8 +28,21 @@ public class UserBadge extends BaseEntity{
     public Badge badge;
 
     // Extra column!
-    public LocalDateTime awardedAt;
+    public LocalDateTime earnedAt;
 
     @Enumerated(EnumType.STRING)
     public BadgeSource source;
+
+    public static void award(ITProfessional user, Badge badge) {
+        // check if badge is already awarded then move forward
+        UserBadge existingUserBadge = UserBadge.find("user=?1 AND badge=?2",user,badge).firstResult();
+        if(existingUserBadge!=null)
+            return;
+        UserBadge ub = new UserBadge();
+        ub.source = BadgeSource.AUTO;
+        ub.user = user;
+        ub.badge = badge;
+        ub.earnedAt = LocalDateTime.now();
+        ub.persist();
+    }
 }

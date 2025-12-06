@@ -1,10 +1,9 @@
 package org.nextgen.model;
 
-import java.sql.Date;
+
 import java.time.LocalDateTime;
 
 import jakarta.json.bind.annotation.JsonbTransient;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -13,21 +12,25 @@ import java.util.List;;
 
 /**
  * Enable UserProgress JPA entity defined as a Panache Entity.
+ * extends BaseProgress to inherit earnedPoints field
  */
 @Entity
 @Table (name = "user_progress" )
-public class UserProgress extends BaseEntity {
+public class UserProgress extends BaseProgress  {
+
     public static String IN_PROGRESS = "In-Progress";
     public static String COMPLETED = "Completed";
 
+    /**
+     * Milestone implments IRewardable interface
+     * with badgeRuleValue 
+     */
     @ManyToOne    
     public Milestone milestone;
+
     public LocalDateTime startDate;
     public LocalDateTime closeDate;
     public String status; // e.g., "in-progress", "completed"
-
-    @Column (name ="earned_points")
-    public Long earnedPoints;
     
     @ManyToOne
     public Milestone nextMilestone; // next milestone to achieve

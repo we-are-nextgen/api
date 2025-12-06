@@ -1,5 +1,6 @@
 package org.nextgen.model;
 
+import java.util.List;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.JoinColumn;
@@ -10,16 +11,13 @@ import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Column;
-import java.util.List;
-
-
 
 /**
  * Represents a piece of lab material, linked to multiple IT Profiles.
  */
 @Entity
 @Table (name = "Learning_track" )
-public class LearningTrack extends BaseEntity {
+public class LearningTrack extends RewardableBase {
     
     // Enum for difficulty levels
     public enum Difficulty {
@@ -34,7 +32,6 @@ public class LearningTrack extends BaseEntity {
     
     @Column(columnDefinition = "TEXT")
     public String description;
-    
     
     @Column(name = "difficulty_level")
     public Difficulty difficultyLevel;
@@ -51,7 +48,6 @@ public class LearningTrack extends BaseEntity {
     @JsonbTransient
     @ManyToOne
     public Domain domain;
-
 
     // Git Repo
     public String repoUrl;
@@ -81,6 +77,7 @@ public class LearningTrack extends BaseEntity {
     @OrderBy("sequence ASC") 
     public List<Lab> labs;
 
+    /* ---- Model Helper Methods ---- */
     // Helper method to find labs by difficulty
     public static List<LearningTrack> findByDifficulty(Difficulty difficulty) {
         return list("difficultyLevel", difficulty);

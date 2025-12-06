@@ -1,7 +1,5 @@
 package org.nextgen.model;
 
-import org.nextgen.model.LearningTrack.Difficulty;
-
 import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -9,9 +7,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
+import org.nextgen.model.LearningTrack.Difficulty;
+
 
 @Entity
-public class Lab extends BaseEntity{
+public class Lab extends RewardableBase {
     
     @Column(nullable = false)
     public String name;
@@ -61,6 +61,7 @@ public class Lab extends BaseEntity{
     @OneToMany(mappedBy = "lab", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     public List<Exercise> exercises;
 
+    /* -- Model Helper Methods -- */
 
     /**
      * Executes a query to get a list of Labs and the total earned points 

@@ -42,7 +42,8 @@ public class ITProfessional extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     public List<UserTrack> userTracks;
     
-    
+    /* ------ Model Helper Methods ---------- */
+
     /**
      * get ITProfessional id by email
      * @param email

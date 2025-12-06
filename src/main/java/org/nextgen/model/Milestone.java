@@ -1,21 +1,20 @@
 package org.nextgen.model;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-
-import java.util.List;
-
 import jakarta.json.bind.annotation.JsonbTransient;
 
+
 @Entity
-public class Milestone extends BaseEntity {
+public class Milestone extends RewardableBase {
     public String name;
     public String description;
-
     public Integer sequence;
     
     @Column (name ="required_points")
@@ -33,15 +32,13 @@ public class Milestone extends BaseEntity {
     )
     public List <Activity> activities;
 
-    
-
     @ManyToOne
     @JsonbTransient
     @JoinColumn(name = "stage_id", insertable = false, updatable = false)
     public Stage stage;
 
     @Column(name = "stage_id")
-    private Long stageId;   // <-- reference only ID
+    public Long stageId;   // <-- reference only ID
 
     public Long getStageId() {
         return stageId;
@@ -51,6 +48,7 @@ public class Milestone extends BaseEntity {
         this.stageId = stageId;
     }
 
+    /* -- Model Helper Methods -- */
     public static Milestone findNextMilestone(Integer squence){
         String query = "sequence > ?1";
         return Milestone.find(query, squence)

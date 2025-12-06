@@ -8,17 +8,22 @@ import java.util.List;
 import java.util.Map;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.enterprise.event.TransactionPhase;
 import jakarta.transaction.Transactional;
 
 import org.nextgen.dto.TrackProgressDTO;
 import org.nextgen.model.Activity;
+import org.nextgen.model.Badge;
 import org.nextgen.model.ITProfessional;
 import org.nextgen.model.Lab;
 import org.nextgen.model.LearningTrack;
 import org.nextgen.model.Milestone;
+import org.nextgen.model.UserBadge;
 import org.nextgen.model.UserLabProgress;
 import org.nextgen.model.UserProgress;
 import org.nextgen.model.UserTrack;
+import org.nextgen.model.Observers.UserTrackCreatedEvent;
 
 
 @ApplicationScoped
@@ -137,7 +142,7 @@ public class TrackProgressService {
             userTrack.finishedAt = LocalDateTime.now();
             userTrack.completed = true;
             userTrack.persist();
-            UserProgress userProgress = UserProgress.getLastUserProgressByStatus(trackId, UserProgress.IN_PROGRESS);
+            UserProgress userProgress = UserProgress.getLastUserProgressByStatus(user.id, UserProgress.IN_PROGRESS);
             Integer requiredPoints = userProgress.milestone.requiredPoints;
             Long totalEarned = LearningTrack.findTotalEarnedPointsByTrack(user.id, trackId);
             LearningTrack track = LearningTrack.findById(trackId);
@@ -214,6 +219,10 @@ public class TrackProgressService {
         return null;
     }
 
+
+    
+    
+
     private void updateJourneyProgress(ITProfessional user, LearningTrack track){
         // 1 - get user current progress
         // if first time enrollment, advance with milestone progress
@@ -226,25 +235,26 @@ public class TrackProgressService {
             lastUserProgress = UserProgress.findLastUserProgress (user.id);
         Integer sequence = lastUserProgress==null?0:lastUserProgress.milestone.sequence;
         Milestone milestone = Milestone.findNextLearningTrackMilestone(sequence);
-        UserProgress userProgress = new UserProgress();
-        userProgress.user = user;
-        userProgress.milestone = milestone;
-        Milestone nextMilestone = Milestone.findNextMilestone(milestone.sequence);
-        userProgress.nextMilestone = nextMilestone;
-        // check if lastUserProgress is null find the prec non learning track one
-        userProgress.prevProgress = lastUserProgress;
-        userProgress.startDate = LocalDateTime.now();
-        userProgress.status = UserProgress.IN_PROGRESS;
-        userProgress.persist();
-        // update user profile if progresses to a new stage 
-        if(user.stage!=milestone.stage)
-        {
-            user.stage = milestone.stage;
-            user.persist();
+        if(milestone!=null) {
+            UserProgress userProgress = new UserProgress();
+            userProgress.user = user;
+            userProgress.milestone = milestone;
+            Milestone nextMilestone = Milestone.findNextMilestone(milestone.sequence);
+            userProgress.nextMilestone = nextMilestone;
+            // check if lastUserProgress is null find the prec non learning track one
+            userProgress.prevProgress = lastUserProgress;
+            userProgress.startDate = LocalDateTime.now();
+            userProgress.status = UserProgress.IN_PROGRESS;
+            userProgress.persist();
+            // update user profile if progresses to a new stage 
+            if(user.stage!=milestone.stage)
+            {
+                user.stage = milestone.stage;
+                user.persist();
+            }
         }
-        
         // else 
-        // check how many points required to acheive this milestone 
+        // check how many points required to achieve this milestone 
     }
 
 }

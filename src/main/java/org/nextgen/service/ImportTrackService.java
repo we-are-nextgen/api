@@ -124,6 +124,7 @@ public class ImportTrackService {
         track.repoBranch = dto.gitBranch;
         track.repoPath = dto.gitPath;
         track.domain = domainEntity;
+        track.badgeRuleValue = yamlDTO.badgeRuleValue;
 
         // Persist
         track.persist();

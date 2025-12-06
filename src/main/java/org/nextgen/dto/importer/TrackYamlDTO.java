@@ -12,6 +12,8 @@ public class TrackYamlDTO {
     public Integer rewardPoints;
     public String domainName;
     public String community;
+    public String badgeRuleValue;
+
 
     public List<LabYamlDTO> labs;
 

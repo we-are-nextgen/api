@@ -265,25 +265,25 @@ insert into team_members (team_id, user_id) values (1,2);
 
 
 
-insert into badge (name, title, icon, trigger, rarity ) values ('Member','✅ Member', 'User', 'Registeration','common');
-insert into badge (name, title, icon, trigger, rarity ) values ('Active Member','💬 Active Member', 'Activity', '10+ posts/comments','rare');
-insert into badge (name, title, icon, trigger, rarity ) values ('Learner', '🟦 Learner','GraduationCap', 'Completing 3 onboarding milestones','epic');
+insert into badge (name, title, icon, rarity, rule_type, rule_value) values ('Member','✅ Member', 'User', 'common', 'COMPLETE_PROFILE','*');
+insert into badge (name, title, icon, rarity, rule_type, rule_value) values ('Learner','🟦 Learner','GraduationCap', 'epic','ENROLL_TO_TRACK','*');
 
-insert into badge (name, title, icon, trigger, rarity ) values ('Helper','🤝 Helper', 'MessageSquare', 'Help 5 members','legendary');
-insert into badge (name, title, icon, trigger, rarity ) values ('Mentor','🧑‍🏫 Mentor', 'Award', 'Provide verified mentoring','epic');
-insert into badge (name, title, icon, trigger, rarity ) values ('Team Player','🤜🤛 Team Player', 'Users', 'Participate in hackathon squad','rare');
+insert into badge (name, title, icon, rarity ) values ('Active Member','💬 Active Member', 'Activity', 'rare');
+insert into badge (name, title, icon, rarity ) values ('Helper','🤝 Helper', 'MessageSquare','legendary');
+insert into badge (name, title, icon, rarity ) values ('Mentor','🧑‍🏫 Mentor', 'Award', 'epic');
+insert into badge (name, title, icon, rarity ) values ('Team Player','🤜🤛 Team Player', 'Users','rare');
 
 
-insert into badge (name, title, icon, trigger, rarity ) values ('Practitioner', '🟩 Practitioner', 'Wrench', 'Completing real use-case tasks','epic');
-insert into badge (name, title, icon, trigger ) values ('Contributor','🟧 Contributor','Code-fork','Completing OSS or internal projects');
-insert into badge (name, title, icon, trigger ) values ('Leader','🟨 Leader','Crown','Community influence, job impact');
+insert into badge (name, title, icon, rarity ) values ('Practitioner', '🟩 Practitioner', 'Wrench','epic');
+insert into badge (name, title, icon ) values ('Contributor','🟧 Contributor','Code-fork');
+insert into badge (name, title, icon ) values ('Leader','🟨 Leader','Crown');
 
-insert into badge (name, title, icon, trigger ) values ('Streak Master','🔥 Streak Master','Flame','7 days or 30 days active learning');
-insert into badge (name, title, icon, trigger ) values ('Fast Climber','🏅 Fast Climber','Zap','Reach Stage 3 within 60 days');
-insert into badge (name, title, icon, trigger ) values ('Super Contributor','🚀 Super Contributor','','Publish 10+ contributions');
-insert into badge (name, title, icon, trigger ) values ('Top 5% Performer','🌟 Top 5% Performer','','Based on journey benchmarking');
+insert into badge (name, title, icon ) values ('Streak Master','🔥 Streak Master','Flame');
+insert into badge (name, title, icon ) values ('Fast Climber','🏅 Fast Climber','Zap');
+insert into badge (name, title, icon ) values ('Super Contributor','🚀 Super Contributor','');
+insert into badge (name, title, icon ) values ('Top 5% Performer','🌟 Top 5% Performer','');
 
-insert into user_badges (user_id,badge_id,awardedAt) values (1,1,'1/4/2025');
+insert into user_badges (user_id,badge_id,earnedAt) values (1,1,'1/4/2025');
 --insert into user_badges (user_id,badge_id,awardedAt) values (1,2,'5/15/2025');
 --insert into user_badges (user_id,badge_id,awardedAt) values (1,3,'6/11/2025');
 --insert into user_badges (user_id,badge_id,awardedAt) values (1,4,'7/24/2025');
