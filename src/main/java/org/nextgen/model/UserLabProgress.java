@@ -3,15 +3,19 @@ package org.nextgen.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.nextgen.model.Observers.BadgeRewardObserver;
+
 import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "user_lab_progress")
-public class UserLabProgress extends BaseEntity {
+@EntityListeners(BadgeRewardObserver.class)
+public class UserLabProgress extends BaseProgress {
 
     @ManyToOne
     @JsonbTransient

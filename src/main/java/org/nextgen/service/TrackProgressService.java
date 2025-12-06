@@ -8,22 +8,17 @@ import java.util.List;
 import java.util.Map;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.event.Observes;
-import jakarta.enterprise.event.TransactionPhase;
 import jakarta.transaction.Transactional;
 
 import org.nextgen.dto.TrackProgressDTO;
 import org.nextgen.model.Activity;
-import org.nextgen.model.Badge;
 import org.nextgen.model.ITProfessional;
 import org.nextgen.model.Lab;
 import org.nextgen.model.LearningTrack;
 import org.nextgen.model.Milestone;
-import org.nextgen.model.UserBadge;
 import org.nextgen.model.UserLabProgress;
 import org.nextgen.model.UserProgress;
 import org.nextgen.model.UserTrack;
-import org.nextgen.model.Observers.UserTrackCreatedEvent;
 
 
 @ApplicationScoped

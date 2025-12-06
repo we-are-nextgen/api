@@ -37,6 +37,7 @@ public class Badge extends BaseEntity {
         COMPLETE_PROFILE,
         ENROLL_TO_TRACK,
         COMPLETE_LAB,
+        COMPLETE_TRACK,
         COMPLETE_MILESTONE,
         COMPLETE_ALL_MILESTONES_IN_STAGE,
         COMPLETE_STAGE,
@@ -93,7 +94,6 @@ public class Badge extends BaseEntity {
      */
     public static Badge findByRule(BadgeRuleType type, String value) {
         Badge badge = find("ruleType = ?1 AND ruleValue = ?2", type, value).firstResult();
-        System.out.println(badge);
         return badge;
     }
 

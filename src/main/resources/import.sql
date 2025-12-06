@@ -268,7 +268,8 @@ insert into team_members (team_id, user_id) values (1,2);
 insert into badge (name, title, icon, rarity, rule_type, rule_value) values ('Member','✅ Member', 'User', 'common', 'COMPLETE_PROFILE','*');
 insert into badge (name, title, icon, rarity, rule_type, rule_value) values ('Learner','🟦 Learner','GraduationCap', 'epic','ENROLL_TO_TRACK','*');
 
-insert into badge (name, title, icon, rarity ) values ('Active Member','💬 Active Member', 'Activity', 'rare');
+insert into badge (name, title, icon, rarity, rule_type, rule_value) values ('Active Member','💬 Active Member', 'Activity', 'rare', 'COMPLETE_TRACK', '*');
+
 insert into badge (name, title, icon, rarity ) values ('Helper','🤝 Helper', 'MessageSquare','legendary');
 insert into badge (name, title, icon, rarity ) values ('Mentor','🧑‍🏫 Mentor', 'Award', 'epic');
 insert into badge (name, title, icon, rarity ) values ('Team Player','🤜🤛 Team Player', 'Users','rare');
