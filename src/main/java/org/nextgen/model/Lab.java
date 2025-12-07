@@ -11,7 +11,7 @@ import org.nextgen.model.LearningTrack.Difficulty;
 
 
 @Entity
-public class Lab extends RewardableBase {
+public class Lab extends BaseRewardable {
     
     @Column(nullable = false)
     public String name;

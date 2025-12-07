@@ -29,6 +29,7 @@ public class TrackYamlDTO {
         public Integer estimatedTimeMin;
         public boolean hasBonusTasks;
         public Integer sequence;
+        public String badgeRuleValue;
 
         public String contentMarkdown;
         public String contentHtml;

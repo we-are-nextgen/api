@@ -1,14 +1,10 @@
 package org.nextgen.service;
 
 import org.nextgen.model.ITProfessional;
-import org.nextgen.model.Milestone;
-import org.nextgen.model.Stage;
 import org.nextgen.model.Badge;
-import org.nextgen.model.BadgeCriteria;
 import org.nextgen.model.UserBadge;
 import org.nextgen.model.BaseProgress;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.enterprise.context.ApplicationScoped;

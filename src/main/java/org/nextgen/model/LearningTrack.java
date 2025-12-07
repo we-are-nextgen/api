@@ -17,7 +17,7 @@ import jakarta.persistence.Column;
  */
 @Entity
 @Table (name = "Learning_track" )
-public class LearningTrack extends RewardableBase {
+public class LearningTrack extends BaseRewardable {
     
     // Enum for difficulty levels
     public enum Difficulty {

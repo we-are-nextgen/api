@@ -12,7 +12,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 
 @Entity
-public class Stage extends RewardableBase {
+public class Stage extends BaseRewardable {
     public String name;
     public String description;
     public String icon;

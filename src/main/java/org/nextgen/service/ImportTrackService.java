@@ -163,6 +163,7 @@ public class ImportTrackService {
             lab.hasBonusTasks = l.hasBonusTasks;
             lab.sequence = l.sequence != null ? l.sequence : order;
             lab.language = dto.gitPath; //git path (folder) should reflect language name
+            lab.badgeRuleValue=l.badgeRuleValue;
 
             // handle markdown/html content (path or inline)
             if (l.contentMarkdown != null && !l.contentMarkdown.isBlank()) {

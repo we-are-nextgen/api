@@ -12,7 +12,7 @@ import jakarta.json.bind.annotation.JsonbTransient;
 
 
 @Entity
-public class Milestone extends RewardableBase {
+public class Milestone extends BaseRewardable {
     public String name;
     public String description;
     public Integer sequence;

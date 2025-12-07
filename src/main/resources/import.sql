@@ -270,12 +270,15 @@ insert into badge (name, title, icon, rarity, rule_type, rule_value) values ('Le
 
 insert into badge (name, title, icon, rarity, rule_type, rule_value) values ('Active Member','💬 Active Member', 'Activity', 'rare', 'COMPLETE_TRACK', '*');
 
+insert into badge (name, title, icon, rarity, rule_type, rule_value) values ('Practitioner', '🟩 Practitioner', 'Wrench','epic', 'COMPLETE_LAB', 'CLP');
+
+
 insert into badge (name, title, icon, rarity ) values ('Helper','🤝 Helper', 'MessageSquare','legendary');
 insert into badge (name, title, icon, rarity ) values ('Mentor','🧑‍🏫 Mentor', 'Award', 'epic');
 insert into badge (name, title, icon, rarity ) values ('Team Player','🤜🤛 Team Player', 'Users','rare');
 
 
-insert into badge (name, title, icon, rarity ) values ('Practitioner', '🟩 Practitioner', 'Wrench','epic');
+
 insert into badge (name, title, icon ) values ('Contributor','🟧 Contributor','Code-fork');
 insert into badge (name, title, icon ) values ('Leader','🟨 Leader','Crown');
 

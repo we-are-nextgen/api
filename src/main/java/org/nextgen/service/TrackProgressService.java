@@ -213,9 +213,6 @@ public class TrackProgressService {
         }
         return null;
     }
-
-
-    
     
 
     private void updateJourneyProgress(ITProfessional user, LearningTrack track){

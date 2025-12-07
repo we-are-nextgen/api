@@ -93,9 +93,20 @@ public class BadgeRewardObserver {
                         if (badge != null) {
                             UserBadge.award(userTrack.user, badge);
                         }
+                    } 
+                } else if(baseEntity instanceof UserLabProgress){
+                        UserLabProgress userLabProgress = (UserLabProgress) baseEntity;
+                        if(userLabProgress.completed){
+                            Badge badge = Badge.findByRule(
+                                Badge.BadgeRuleType.COMPLETE_LAB,
+                                userLabProgress.lab.badgeRuleValue
+                            );
+                            if (badge != null) {
+                                UserBadge.award(userLabProgress.user, badge);
+                            }
+                        }
+                        //System.out.println(UserLabProgress.lab.name);
                     }
-                    
-                }
                 break;        
             default:
                 break;
