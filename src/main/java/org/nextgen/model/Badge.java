@@ -36,8 +36,9 @@ public class Badge extends BaseEntity {
     public enum BadgeRuleType {
         COMPLETE_PROFILE,
         ENROLL_TO_TRACK,
-        COMPLETE_LAB,
+        ENROLL_TO_LAB,
         COMPLETE_TRACK,
+        COMPLETE_LAB,
         COMPLETE_MILESTONE,
         COMPLETE_ALL_MILESTONES_IN_STAGE,
         COMPLETE_STAGE,

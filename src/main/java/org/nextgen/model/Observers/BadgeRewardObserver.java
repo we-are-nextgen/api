@@ -72,9 +72,10 @@ public class BadgeRewardObserver {
                     }
                 } 
                 else if(baseEntity instanceof UserLabProgress){
+                    // any rewards for starting labs Badge.BadgeRuleType.ENROLL_TO_LAB
                     UserLabProgress UserLabProgress = (UserLabProgress) baseEntity;
                     System.out.println(UserLabProgress.lab.name);
-                    //if(UserLabProgress.c)
+                    
                 }
 
 
