@@ -15,6 +15,7 @@ import org.nextgen.model.BaseProgress;
 import org.nextgen.model.LearningTrack;
 import org.nextgen.model.UserBadge;
 import org.nextgen.model.UserLabProgress;
+import org.nextgen.model.UserProgress;
 import org.nextgen.model.UserTrack;
 
 @ApplicationScoped
@@ -44,12 +45,17 @@ public class BadgeRewardObserver {
 
     // Run this ONLY after the UserTrack is successfully committed to DB
     // This gives you a fresh transaction and prevents the AssertionFailure
+    /**
+     * 
+     * @param event
+     */
     @Transactional(Transactional.TxType.REQUIRES_NEW)
-    public void onUserTrackCreated(@Observes(during = TransactionPhase.AFTER_SUCCESS) BadgeRewardEvent event) {
+    public void onBadgeRewardEvent(@Observes(during = TransactionPhase.AFTER_SUCCESS) BadgeRewardEvent event) {
 
         BaseEntity baseEntity = (BaseEntity)event.getProgressRecrod();
 
         switch (event.getEventType()) {
+            // handle new records
             case BadgeRewardEvent.EventType.INSERT:    
                 // Enroll to Track
                 if(baseEntity instanceof UserTrack) {
@@ -77,9 +83,8 @@ public class BadgeRewardObserver {
                     System.out.println(UserLabProgress.lab.name);
                     
                 }
-
-
                 break;
+            // handle records update
             case BadgeRewardEvent.EventType.UPDATE:
                 if(baseEntity instanceof UserTrack) {
                     UserTrack userTrack = (UserTrack)baseEntity;
@@ -106,7 +111,17 @@ public class BadgeRewardObserver {
                                 UserBadge.award(userLabProgress.user, badge);
                             }
                         }
-                        //System.out.println(UserLabProgress.lab.name);
+                } else if(baseEntity instanceof UserProgress){
+                        UserProgress userProgress = (UserProgress) baseEntity;
+                        if(UserProgress.COMPLETED.equals(userProgress.status)){
+                            Badge badge = Badge.findByRule(
+                                Badge.BadgeRuleType.COMPLETE_MILESTONE,
+                                userProgress.milestone.badgeRuleValue
+                            );
+                            if (badge != null) {
+                                UserBadge.award(userProgress.user, badge);
+                            }
+                        }
                     }
                 break;        
             default:
