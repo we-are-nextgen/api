@@ -61,10 +61,14 @@
             <artifactId>quarkus-hibernate-orm</artifactId>
         </dependency>
 
+        <!-- for the web terminal implementation -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-websockets</artifactId>
         </dependency>
+
+        <!-- move to drools to externalize business rules -->
+        
     
 
         <!-- JGit (stable release that resolves from Maven Central) -->
