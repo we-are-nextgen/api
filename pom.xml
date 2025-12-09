@@ -68,8 +68,6 @@
         </dependency>
 
         <!-- move to drools to externalize business rules -->
-        
-    
 
         <!-- JGit (stable release that resolves from Maven Central) -->
        <dependency>
