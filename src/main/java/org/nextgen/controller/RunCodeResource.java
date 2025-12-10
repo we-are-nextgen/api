@@ -1,4 +1,4 @@
-package org.nextgen.runner;
+package org.nextgen.controller;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
