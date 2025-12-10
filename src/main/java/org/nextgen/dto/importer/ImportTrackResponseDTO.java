@@ -1,8 +1,8 @@
-package org.nextgen.dto;
+package org.nextgen.dto.importer;
 
 import java.util.List;
 
-public class ImportResponseDTO {
+public class ImportTrackResponseDTO {
 
     private boolean success;
     private String message;

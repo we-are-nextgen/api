@@ -4,7 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import org.eclipse.jgit.api.Git;
 import org.yaml.snakeyaml.Yaml;
-import org.nextgen.dto.ImportTrackDTO;
+import org.nextgen.dto.importer.ImportTrackDTO;
 import org.nextgen.dto.importer.TrackYamlDTO;
 import org.nextgen.model.Asset;
 import org.nextgen.model.Domain;

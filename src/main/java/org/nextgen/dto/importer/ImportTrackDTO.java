@@ -1,4 +1,4 @@
-package org.nextgen.dto;
+package org.nextgen.dto.importer;
 
 public class ImportTrackDTO {
 

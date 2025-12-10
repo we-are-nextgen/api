@@ -6,12 +6,12 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 
-import org.nextgen.dto.ImportTrackDTO;
+import org.nextgen.dto.importer.ImportTrackDTO;
 import org.nextgen.model.LearningTrack;
 import org.nextgen.service.ImportTrackService;
 
 @Path("/import")
-public class ImportTrackController {
+public class ImportController {
 
     @Inject
     ImportTrackService importTrackService;
@@ -30,7 +30,7 @@ public class ImportTrackController {
 
 
     @GET
-    @Path("/load/{lab}")
+    @Path("/track/{lab}")
     public LearningTrack importTrack(@PathParam("lab") String lab) {
         try {
             ImportTrackDTO importTrackDTO = new ImportTrackDTO();
@@ -45,4 +45,6 @@ public class ImportTrackController {
         }
         
     }
+
+   
 }
