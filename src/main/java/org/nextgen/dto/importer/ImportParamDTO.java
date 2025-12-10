@@ -1,6 +1,6 @@
 package org.nextgen.dto.importer;
 
-public class ImportTrackDTO {
+public class ImportParamDTO {
 
     public String gitRepoUrl;
     public String gitBranch = "main";   // optional, default main

@@ -19,13 +19,14 @@ public class BootcampYamlDTO {
         public String type;           // optional for certain modules
         public String description;    // optional
         public List<String> objectives;
+        public List<String> resources;
         public List<String> linkedLabs;
         public Map<String, String> components; // primer, demo, lab, quiz, discussion
         public String scenario;        // challenge modules
         public List<String> tasks;     // capstone tasks
         public Object deliverables;    // capstone design deliverables
         public Object format;          // showcase
-        public Object badge_id;        // badge
+        public Object badge;        // badge
     }
 
 

@@ -4,7 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import org.eclipse.jgit.api.Git;
 import org.yaml.snakeyaml.Yaml;
-import org.nextgen.dto.importer.ImportTrackDTO;
+import org.nextgen.dto.importer.ImportParamDTO;
 import org.nextgen.dto.importer.TrackYamlDTO;
 import org.nextgen.model.Asset;
 import org.nextgen.model.Domain;
@@ -43,14 +43,14 @@ public class ImportTrackService {
     }
 
     @Transactional
-    public LearningTrack importTrack(ImportTrackDTO dto) throws Exception {
+    public LearningTrack importTrack(ImportParamDTO dto) throws Exception {
         // 1. Clone repository
         Path cloneDir = Files.createTempDirectory("track-import-");
-        Git git = Git.cloneRepository()
-                .setURI(dto.gitRepoUrl)
-                .setDirectory(cloneDir.toFile())
-                .setBranch(dto.gitBranch)
-                .call();
+        Git.cloneRepository()
+            .setURI(dto.gitRepoUrl)
+            .setDirectory(cloneDir.toFile())
+            .setBranch(dto.gitBranch)
+            .call();
 
         // 2. Resolve gitPath inside repo
         File pathInsideRepo = dto.gitPath == null || dto.gitPath.isBlank() ?
@@ -94,7 +94,7 @@ public class ImportTrackService {
      * Persist track metadata (LearningTrack) derived from YAML.
      * Returns the persisted LearningTrack.
      */
-    private LearningTrack saveLearningTrack(TrackYamlDTO yamlDTO, ImportTrackDTO dto) {
+    private LearningTrack saveLearningTrack(TrackYamlDTO yamlDTO, ImportParamDTO dto) {
         // 1. find or create domain
         Domain domainEntity = null;
         if (yamlDTO.domainName != null && !yamlDTO.domainName.isBlank()) {
@@ -138,7 +138,7 @@ public class ImportTrackService {
      * repoRoot is the root path of the cloned repo.
      * track is the persisted LearningTrack.
      */
-    private void saveLabsFromRepo(TrackYamlDTO yaml, Path repoRoot, LearningTrack track, ImportTrackDTO dto) throws IOException {
+    private void saveLabsFromRepo(TrackYamlDTO yaml, Path repoRoot, LearningTrack track, ImportParamDTO dto) throws IOException {
         if (yaml.labs == null || yaml.labs.isEmpty()) {
             LOG.warn("No labs to import for track " + track.name);
             return;

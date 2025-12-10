@@ -6,8 +6,10 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 
-import org.nextgen.dto.importer.ImportTrackDTO;
+import org.nextgen.dto.importer.ImportParamDTO;
+import org.nextgen.model.Bootcamp;
 import org.nextgen.model.LearningTrack;
+import org.nextgen.service.ImportBootcampService;
 import org.nextgen.service.ImportTrackService;
 
 @Path("/import")
@@ -16,9 +18,12 @@ public class ImportController {
     @Inject
     ImportTrackService importTrackService;
 
+    @Inject
+    ImportBootcampService importBootcampService;
+
     @POST
     @Path("/track")
-    public LearningTrack importTrack(ImportTrackDTO importTrackDTO) {
+    public LearningTrack importTrack(ImportParamDTO importTrackDTO) {
         try {
             return importTrackService.importTrack(importTrackDTO);    
         } catch (Exception e) {
@@ -33,11 +38,11 @@ public class ImportController {
     @Path("/track/{lab}")
     public LearningTrack importTrack(@PathParam("lab") String lab) {
         try {
-            ImportTrackDTO importTrackDTO = new ImportTrackDTO();
-            importTrackDTO.gitRepoUrl = "https://github.com/we-are-nextgen/tracks";
-            importTrackDTO.gitPath = lab;
-            importTrackDTO.gitBranch = "main";
-            return importTrackService.importTrack(importTrackDTO);    
+            ImportParamDTO importParamDTO = new ImportParamDTO();
+            importParamDTO.gitRepoUrl = "https://github.com/we-are-nextgen/tracks";
+            importParamDTO.gitPath = lab;
+            importParamDTO.gitBranch = "main";
+            return importTrackService.importTrack(importParamDTO);    
         } catch (Exception e) {
             // handle exception
             e.printStackTrace();
@@ -45,6 +50,24 @@ public class ImportController {
         }
         
     }
+
+    @GET
+    @Path("/bootcamp/{bootcamp}")
+    public Bootcamp importBootcamp(@PathParam("bootcamp") String lab) {
+        try {
+            ImportParamDTO importParamDTO = new ImportParamDTO();
+            importParamDTO.gitRepoUrl = "https://github.com/we-are-nextgen/bootcamps";
+            importParamDTO.gitPath = lab;
+            importParamDTO.gitBranch = "main";
+            return importBootcampService.importTrack(importParamDTO);    
+        } catch (Exception e) {
+            // handle exception
+            e.printStackTrace();
+            return null;
+        }
+        
+    }
+
 
    
 }
