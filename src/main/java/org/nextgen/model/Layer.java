@@ -11,7 +11,7 @@ import java.util.List;
 public class Layer extends BaseEntity {
     
     public String type;        // orientation, core, practice, capstone
-    public String label;       // e.g. Orientation, Core Modules
+    public String name;       // e.g. Orientation, Core Modules
 
     @ManyToOne
     public Bootcamp bootcamp;

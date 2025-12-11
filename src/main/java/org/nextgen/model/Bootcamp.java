@@ -26,7 +26,7 @@ public class Bootcamp extends BaseRewardable {
 
     @ElementCollection
     public List<String> outcomes;
-
+    
     @OneToMany(mappedBy = "bootcamp", cascade = CascadeType.ALL)
     public List<Layer> layers;
 }

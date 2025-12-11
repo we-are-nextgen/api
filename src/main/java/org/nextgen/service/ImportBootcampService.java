@@ -12,12 +12,19 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.jgit.api.Git;
 import org.jboss.logging.Logger;
 import org.nextgen.dto.importer.BootcampYamlDTO;
+import org.nextgen.dto.importer.BootcampYamlDTO.LayerDTO;
+import org.nextgen.dto.importer.BootcampYamlDTO.ModuleDTO;
 import org.nextgen.dto.importer.ImportParamDTO;
 import org.nextgen.model.Bootcamp;
+import org.nextgen.model.Component;
+import org.nextgen.model.Layer;
+import org.nextgen.model.Module;
 
 @ApplicationScoped
 public class ImportBootcampService {
@@ -44,7 +51,7 @@ public class ImportBootcampService {
                 cloneDir.toFile() :
                 cloneDir.resolve(dto.gitPath).toFile();
 
-        // 3. Find track.yaml
+        // 3. Find BOOTCAMP_YAML
         File bootcampYamlFile = new File(pathInsideRepo, BOOTCAMP_YAML);
         if (!bootcampYamlFile.exists()) {
             throw new RuntimeException(BOOTCAMP_YAML + "not found at: " + bootcampYamlFile.getPath());
@@ -57,14 +64,9 @@ public class ImportBootcampService {
         // 5. Validate YAML
         validateYaml(yamlDTO);
 
-        // 6. Store LearningTrack in DB
+        // 6. Store Bootcamp in DB
         Bootcamp bootcamp = saveBootcamp(yamlDTO, dto);
-
-        // 7. Process labs + assets + exercises
-        // Path labsPath = cloneDir.resolve(dto.gitPath == null ? "" : dto.gitPath);
-        // System.out.println("Repo URL: ======== " + dto.gitRepoUrl); // --- IGNORE ---
-        // saveLabsFromRepo(yamlDTO, labsPath, track, dto);
-
+        
         return bootcamp;
     }
 
@@ -77,8 +79,45 @@ public class ImportBootcampService {
         //}
     }
 
-    private Bootcamp saveBootcamp(BootcampYamlDTO yamlDTO, ImportParamDTO dto) {
-        return null;
+    private Bootcamp saveBootcamp(BootcampYamlDTO bootcampDTO, ImportParamDTO dto) {
+        Bootcamp bootcamp = new Bootcamp();
+        bootcamp.name=bootcampDTO.name;
+        bootcamp.description=bootcampDTO.description;
+        bootcamp.badgeRuleValue = bootcampDTO.badgeRuleValue;
+        bootcamp.version=bootcampDTO.version;
+        bootcamp.durationWeeks=bootcampDTO.durationWeeks;
+        bootcamp.audience = bootcampDTO.audience;
+        bootcamp.outcomes = bootcampDTO.outcomes;
+        bootcamp.persist();
+        for(LayerDTO layerDTO : bootcampDTO.layers){
+            Layer layer = new Layer();
+            layer.bootcamp = bootcamp;
+            layer.name = layerDTO.name;
+            layer.type = layerDTO.type;
+            layer.persist();
+            for(ModuleDTO moduleDTO : layerDTO.modules){
+                Module module = new Module();
+                module.layer = layer;
+                module.name = moduleDTO.name;
+                module.type = moduleDTO.type;
+                module.objectives = moduleDTO.objectives;
+                module.linkedLabs = moduleDTO.linkedLabs;
+                if(moduleDTO.components!=null) {
+                    List<Component> list = moduleDTO.components.entrySet().stream()
+                        .map(e -> {
+                            Component c = new Component();
+                            c.type= e.getKey();
+                            c.reference = e.getValue();
+                            c.module = module;
+                            return c;
+                        })
+                        .collect(Collectors.toList());
+                    module.components = list;
+                }
+                module.persist();
+            }
+        }
+        return bootcamp;
     }
 
     public BootcampYamlDTO loadBootcampFromYaml(String yamlPath) {

@@ -1,6 +1,7 @@
 package org.nextgen.model;
 
 
+
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
