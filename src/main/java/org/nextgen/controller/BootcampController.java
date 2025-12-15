@@ -5,6 +5,7 @@ import org.nextgen.model.UserBootcamp;
 import java.util.List;
 import java.util.Map;
 
+import org.nextgen.dto.UserBootcampDTO;
 import org.nextgen.model.Bootcamp;
 import org.nextgen.model.BootcampStart;
 import org.nextgen.service.BootcampService;
@@ -36,10 +37,18 @@ public class BootcampController {
 
     @GET
     @Path("/starting/{weeks}")
-    public List<Bootcamp> fgetStartingWithinNextTwoMonths(
+    public List<Bootcamp> getStartingWithinNextTwoMonths(
         @PathParam("weeks") Long weeks
     ){
         return bootcampService.findStartingWithinNextTwoMonths(weeks);
+    }
+
+    @GET
+    @Path("/user")
+    public List<UserBootcampDTO> getUserBootcamps(
+        @QueryParam("email") String email
+    ){
+        return bootcampService.findBootcampsByUser(email);
     }
 
     @POST

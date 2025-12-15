@@ -1,6 +1,9 @@
 package org.nextgen.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import org.nextgen.dto.UserBootcampDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,10 +29,15 @@ public class UserBootcamp extends BaseProgress {
 
     @Column(name = "end_date")
     public LocalDateTime endDate;
+    
+    public UserBootcamp(){
+
+    }
 
     public UserBootcamp(ITProfessional user,BootcampStart bootcampStart){
         this.bootcampStart=bootcampStart;
         this.user=user;
         this.joinDate = LocalDateTime.now();
     }
+
 }
