@@ -15,6 +15,9 @@ public class BootcampYamlDTO {
     public String badgeRuleValue;
     public String difficultyLevel;
     public Integer rewardPoints;
+    public String expectedStartDate;
+
+
 
     public static class LayerDTO {
         public String name;

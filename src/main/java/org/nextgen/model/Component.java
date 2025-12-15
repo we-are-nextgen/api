@@ -1,5 +1,6 @@
 package org.nextgen.model;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
@@ -9,5 +10,6 @@ public class Component extends BaseEntity {
     public String reference;   // file path, lab ID, video URL, etc.
 
     @ManyToOne
+    @JsonbTransient
     public Module module;
 }

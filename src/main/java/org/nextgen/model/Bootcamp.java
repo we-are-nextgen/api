@@ -2,9 +2,13 @@ package org.nextgen.model;
 
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -20,6 +24,9 @@ public class Bootcamp extends BaseRewardable {
     public String version;
     public String description;
     public Integer durationWeeks;
+    
+    @Column(name ="expected_start_date")
+    public LocalDate expectedStartDate;
 
     @ElementCollection
     public List<String> audience;
@@ -29,4 +36,15 @@ public class Bootcamp extends BaseRewardable {
     
     @OneToMany(mappedBy = "bootcamp", cascade = CascadeType.ALL)
     public List<Layer> layers;
+
+    @ManyToOne
+    ITProfessional mentor;
+
+    public static List<Bootcamp> findAllPaginated(int page, int pageSize) {
+    return findAll()
+        .page(page, pageSize)
+        .list();
+    }
+
+
 }

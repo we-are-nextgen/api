@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -88,6 +89,7 @@ public class ImportBootcampService {
         bootcamp.durationWeeks=bootcampDTO.durationWeeks;
         bootcamp.audience = bootcampDTO.audience;
         bootcamp.outcomes = bootcampDTO.outcomes;
+        bootcamp.expectedStartDate = LocalDate.parse(bootcampDTO.expectedStartDate);
         bootcamp.persist();
         for(LayerDTO layerDTO : bootcampDTO.layers){
             Layer layer = new Layer();
