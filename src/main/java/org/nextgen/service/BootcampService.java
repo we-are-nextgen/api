@@ -57,15 +57,17 @@ public class BootcampService {
                 bc.id,
                 bc.name,
                 bc.version,
-                ubs.status,
-                ubs.startedAt,
-                ubs.cohortName
+                bs.status,
+                bs.startedAt,
+                bs.cohortName,
+                bc.durationWeeks,
+                bs.id
             )
             FROM UserBootcamp ub
-            JOIN ub.bootcampStart ubs
-            JOIN ubs.bootcamp bc
+            JOIN ub.bootcampStart bs
+            JOIN bs.bootcamp bc
             WHERE ub.user = :user
-            ORDER BY ubs.startedAt DESC
+            ORDER BY bs.startedAt DESC
         """, UserBootcampDTO.class)
         .setParameter("user", user)
         .getResultList();
