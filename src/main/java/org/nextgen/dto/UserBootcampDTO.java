@@ -1,7 +1,6 @@
 package org.nextgen.dto;
 
 import java.time.Instant;
-import java.util.List;
 
 import org.nextgen.model.BootcampStart;
 

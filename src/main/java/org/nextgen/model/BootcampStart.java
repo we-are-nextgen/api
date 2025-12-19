@@ -35,6 +35,7 @@ public class BootcampStart extends BaseEntity {
     public String cohortName;
 
     public enum STATUS {
+        OPEN_FOR_ENROLLMENT,
         SARTED,
         KICKOFF,
         ORIENTATION,
@@ -51,7 +52,7 @@ public class BootcampStart extends BaseEntity {
         s.user = ITProfessional.getUserByEmail(email);
         s.bootcamp = Bootcamp.findById(bootcampId);
         s.cohortName = cohortName;
-        s.status = STATUS.SARTED;
+        s.status = STATUS.OPEN_FOR_ENROLLMENT;
         s.persist();
         return s;
     }

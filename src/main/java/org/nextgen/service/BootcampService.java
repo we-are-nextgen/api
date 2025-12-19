@@ -3,8 +3,10 @@ package org.nextgen.service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.nextgen.dto.BootcampEnrollmentCheckDTO;
 import org.nextgen.dto.UserBootcampDTO;
 import org.nextgen.model.Bootcamp;
 import org.nextgen.model.BootcampStart;
@@ -22,14 +24,28 @@ public class BootcampService {
     @PersistenceContext
     EntityManager em;
 
+    /**
+     * get count of all bootcamps in the system
+     * @return
+     */
     public Long getBootCampCount(){
         return Bootcamp.count();
     }
 
+    /**
+     * get paginated list of bootcamps
+     * @param page
+     * @param pageSize
+     * @return
+     */
     public List<Bootcamp> getAllBootCamps(int page, int pageSize){
         return Bootcamp.findAllPaginated(page, pageSize);
     }
 
+    /**
+     * get list of bootcamps by status
+     * @return
+     */
     public Map<BootcampStart.STATUS, Long> getBootCampCountByStatus() {
         PanacheQuery<BootcampStart> query = BootcampStart.findAll();
         return query.stream()
@@ -39,7 +55,12 @@ public class BootcampService {
                     ));
     } 
 
-    public List<Bootcamp> findStartingWithinNextTwoMonths(Long weeks) {
+    /**
+     * get list of bootcamps starting in [weeks]
+     * @param weeks
+     * @return
+     */
+    public List<Bootcamp> getBootcampsStartingWithin(Long weeks) {
         LocalDate today = LocalDate.now();
         LocalDate twoMonthsLater = today.plusWeeks(weeks);
 
@@ -50,6 +71,11 @@ public class BootcampService {
         ).list();
     }    
 
+    /**
+     * get user bootcamps
+     * @param email
+     * @return
+     */
     public List<UserBootcampDTO> findBootcampsByUser(String email) {
         ITProfessional user = ITProfessional.getUserByEmail(email);
         return em.createQuery("""
@@ -73,17 +99,51 @@ public class BootcampService {
         .getResultList();
     }
 
-    public List<UserBootcamp> getBootCampByUser(String email) {
-        ITProfessional user = ITProfessional.getUserByEmail(email);
-        return UserBootcamp.find("""
-        SELECT ub
-        FROM UserBootcamp ub
-        JOIN FETCH ub.bootcampStart ubs
-        JOIN FETCH ubs.bootcamp
-        WHERE ub.user = ?1
-        """, user).list();
-        //return UserBootcamp.find("user=?1", user).list();
-    } 
+    /**
+     * get Bootcamp by id
+     * @param id
+     * @return
+     */
+    public Bootcamp getBootcamp(Long id){
+        return Bootcamp.findById(id);
+    }
+
+
+    public Optional<BootcampEnrollmentCheckDTO> isBootcampReadyForEnrollment(Long id, String email){
+        List<BootcampEnrollmentCheckDTO> result = em.createQuery("""
+            SELECT new org.nextgen.dto.BootcampEnrollmentCheckDTO(
+                b.id,
+                bs.id,
+                bs.status,
+                b.capacity,
+                COUNT(ub.id)
+            )
+            FROM BootcampStart bs
+            JOIN bs.bootcamp b
+            LEFT JOIN UserBootcamp ub ON ub.bootcampStart = bs
+            WHERE b.id = :bootcampId
+              AND bs.status = :status
+            GROUP BY b.id, bs.id, b.capacity, bs.status
+        """, BootcampEnrollmentCheckDTO.class)
+        .setParameter("bootcampId", id)
+        .setParameter("status", BootcampStart.STATUS.OPEN_FOR_ENROLLMENT)
+        .getResultList();
+        
+        // check if user already enrolled 
+
+        Optional<BootcampEnrollmentCheckDTO> bootcampEnrollmentCheckDTO = result.stream().findFirst();
+        if(!bootcampEnrollmentCheckDTO.isEmpty()) {
+            bootcampEnrollmentCheckDTO.ifPresent(dto -> 
+                {
+                    ITProfessional user = ITProfessional.getUserByEmail(email);
+                    BootcampStart bootcampStart = BootcampStart.find("bootcamp.id=?1",dto.bootcampStartId).firstResult();
+                    UserBootcamp userBootcamp = UserBootcamp.findByUserAndBootcampStart(bootcampStart, user);
+                    dto.amIEnrolled=(userBootcamp != null);
+                }
+            );
+        }
+        return bootcampEnrollmentCheckDTO;
+    }
 
     @Transactional
     public BootcampStart startBootcamp(Long bootcampId, String cohortName, String email){
@@ -102,7 +162,10 @@ public class BootcampService {
     public UserBootcamp enrollUser(String email,Long bootcampStartId){
         ITProfessional user = ITProfessional.getUserByEmail(email);
         BootcampStart bootcampStart = BootcampStart.findById(bootcampStartId);
-        UserBootcamp userBootcamp = new UserBootcamp(user,bootcampStart);;
+        UserBootcamp userBootcamp = UserBootcamp.findByUserAndBootcampStart(bootcampStart, user);
+        if (userBootcamp!=null)
+            return userBootcamp;
+        userBootcamp = new UserBootcamp(user,bootcampStart);;
         userBootcamp.persist();
         return userBootcamp;
     }

@@ -90,6 +90,7 @@ public class ImportBootcampService {
         bootcamp.audience = bootcampDTO.audience;
         bootcamp.outcomes = bootcampDTO.outcomes;
         bootcamp.expectedStartDate = LocalDate.parse(bootcampDTO.expectedStartDate);
+        bootcamp.capacity = bootcampDTO.capacity;
         bootcamp.persist();
         for(LayerDTO layerDTO : bootcampDTO.layers){
             Layer layer = new Layer();

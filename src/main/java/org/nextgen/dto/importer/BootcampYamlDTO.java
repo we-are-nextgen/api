@@ -16,6 +16,7 @@ public class BootcampYamlDTO {
     public String difficultyLevel;
     public Integer rewardPoints;
     public String expectedStartDate;
+    public Integer capacity;
 
 
 

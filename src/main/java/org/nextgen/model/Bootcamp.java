@@ -24,6 +24,7 @@ public class Bootcamp extends BaseRewardable {
     public String version;
     public String description;
     public Integer durationWeeks;
+    public Integer capacity;
     
     @Column(name ="expected_start_date")
     public LocalDate expectedStartDate;

@@ -37,7 +37,12 @@ public class UserBootcamp extends BaseProgress {
     public UserBootcamp(ITProfessional user,BootcampStart bootcampStart){
         this.bootcampStart=bootcampStart;
         this.user=user;
+        // join date will be assigned today's date
         this.joinDate = LocalDateTime.now();
+    }
+
+    public static UserBootcamp findByUserAndBootcampStart(BootcampStart bootcampStart, ITProfessional user){
+        return UserBootcamp.find("user=?1 and bootcampStart=?2", user, bootcampStart).firstResult();
     }
 
 }

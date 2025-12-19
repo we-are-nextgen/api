@@ -4,7 +4,9 @@ import org.nextgen.model.UserBootcamp;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import org.nextgen.dto.BootcampEnrollmentCheckDTO;
 import org.nextgen.dto.UserBootcampDTO;
 import org.nextgen.model.Bootcamp;
 import org.nextgen.model.BootcampStart;
@@ -30,6 +32,14 @@ public class BootcampController {
     }
 
     @GET
+    @Path("{id}")
+    public Bootcamp getBootCamp(
+        @PathParam("id") Long id 
+    ){
+        return bootcampService.getBootcamp(id);
+    }
+
+    @GET
     @Path("/status/count")
     public Map<BootcampStart.STATUS, Long> getBootCampCountByStatus(){
         return bootcampService.getBootCampCountByStatus();
@@ -37,10 +47,10 @@ public class BootcampController {
 
     @GET
     @Path("/starting/{weeks}")
-    public List<Bootcamp> getStartingWithinNextTwoMonths(
+    public List<Bootcamp> getBootcampsStartingWithin(
         @PathParam("weeks") Long weeks
     ){
-        return bootcampService.findStartingWithinNextTwoMonths(weeks);
+        return bootcampService.getBootcampsStartingWithin(weeks);
     }
 
     @GET
@@ -51,6 +61,30 @@ public class BootcampController {
         return bootcampService.findBootcampsByUser(email);
     }
 
+    /**
+     * 
+     * @param id
+     * @param email
+     * @return example output 
+     *          {
+                "amIEnrolled": true,
+                "bootcampStartId": 1,
+                "capacity": 2,
+                "id": 1,
+                "numberOfApplicants": 1,
+                "status": "OPEN_FOR_ENROLLMENT"
+                }
+     */
+    @GET
+    @Path("{id}/ready")
+    public Optional<BootcampEnrollmentCheckDTO> isBootcampReadyForEnrollment(
+        @PathParam("id") Long id,
+        @QueryParam("email") String email
+    ){
+         return bootcampService.isBootcampReadyForEnrollment(id,email);
+    }
+
+
     @POST
     @Path("/{bootcampId}/status")
     public BootcampStart setBootCampStatus(
@@ -59,7 +93,6 @@ public class BootcampController {
     ){
         return bootcampService.setStatus(bootcampStartId,status);
     }
-
 
 
     @POST
