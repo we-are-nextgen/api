@@ -1,6 +1,7 @@
 package org.nextgen.model;
 
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,16 +26,16 @@ public class Stage extends BaseRewardable {
     public Journey journey;
 
     @Column(name = "journey_id")
-    private Long journeyId;   // <-- reference only ID
+    private UUID journeyId;   // <-- reference only ID
 
     @OneToMany(mappedBy = "stage", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     public List<Milestone> milestones;
 
-    public Long getJourneyId() {
+    public UUID getJourneyId() {
     return journeyId;
     }
 
-    public void setJourneyId(Long journeyId) {
+    public void setJourneyId(UUID journeyId) {
         this.journeyId = journeyId;
     }
 

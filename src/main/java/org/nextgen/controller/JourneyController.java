@@ -5,6 +5,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import java.util.List;
+import java.util.UUID;
 
 import org.nextgen.model.Journey;
 import org.nextgen.service.JourneyService;
@@ -23,7 +24,7 @@ public class JourneyController {
 
     @GET
     @Path("/{id}")
-    public Journey getJourneyById(@PathParam("id") long id) {
+    public Journey getJourneyById(@PathParam("id") UUID id) {
         return journeyService.getByJourneyId(id); 
     }
 

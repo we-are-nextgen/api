@@ -9,7 +9,7 @@ import jakarta.inject.Inject;
 
 import java.util.HashMap;
 import java.util.List;
-
+import java.util.UUID;
 
 import org.nextgen.model.LearningTrack;
 import org.nextgen.service.LearningTrackService;
@@ -27,7 +27,7 @@ public class LearningTrackController {
 
     @GET
     @Path("/{id}")
-    public LearningTrack get(@PathParam("id") long id) {
+    public LearningTrack get(@PathParam("id") UUID id) {
         return learningTrackService.getLearningTrackById(id);
     }
 
@@ -39,14 +39,14 @@ public class LearningTrackController {
 
     @GET
     @Path("/domain/{id}")
-    public List<LearningTrack> getByDomainId(@PathParam("id") long id) {
+    public List<LearningTrack> getByDomainId(@PathParam("id") UUID id) {
         return learningTrackService.getLearningTracksByDomainId(id);
     }
 
     @GET
     @Path("/domain/{id}/paginated")
     public HashMap<Object,Object> getByDomainIdPaged(
-            @PathParam("id") long domainId,
+            @PathParam("id") UUID domainId,
             @QueryParam("page") int page,
             @QueryParam("pageSize") int pageSize
     ) {

@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -25,7 +26,7 @@ import org.nextgen.model.UserTrack;
 public class TrackProgressService {
     
 
-    public TrackProgressDTO getProgress(Long userId, Long trackId) {
+    public TrackProgressDTO getProgress(UUID userId, UUID trackId) {
 
         // 1️ Check enrollment
         UserTrack userTrack = UserTrack.find("user.id = ?1 AND learningTrackId = ?2", userId, trackId)
@@ -40,9 +41,9 @@ public class TrackProgressService {
 
         // 3️ Get completed labs by this user for this track
         List<Object[]> results = Lab.findLabsWithTotalEarnedPointsByTrack(userId,trackId);
-        List<Map<String,Long>> completedLabs = new ArrayList<Map<String,Long>>();
+        List<Map<String,Object>> completedLabs = new ArrayList<Map<String,Object>>();
         for (Object[] row : results) {
-            Map<String,Long> map = new HashMap<String,Long>();
+            Map<String,Object> map = new HashMap<String,Object>();
             Lab lab = (Lab) row[0];
             Long totalEarnedPoints = (Long) row[1];
             map.put("labId", lab.id);
@@ -60,26 +61,26 @@ public class TrackProgressService {
         "user.id = ?1 AND track.id = ?2 AND completed = false",
         userId, trackId
         ).firstResult();
-
+        
         return new TrackProgressDTO(enrolled, completedLabs, progress, 
-            labInProgress != null ? labInProgress.lab.id : Long.valueOf(0),completed );
+            labInProgress != null ? labInProgress.lab.id : null,completed );
     }
 
     
-    public TrackProgressDTO getProgressByEmail(String email, Long trackId) {
+    public TrackProgressDTO getProgressByEmail(String email,  UUID trackId) {
         // Find user by email (we use email as unique identifier userId)
 
         ITProfessional user = ITProfessional.find("userId", email).firstResult();
         if (user == null) {
-            return new TrackProgressDTO(false, List.of(), 0, Long.valueOf(0),false );
+            return new TrackProgressDTO(false, List.of(), 0, null,false );
         }
 
         return getProgress(user.id, trackId);
     }
 
    
-    public Lab getNextLab(String email, Long trackId) {
-        Long userId = ITProfessional.getUserIdByEmail(email);
+    public Lab getNextLab(String email, UUID trackId) {
+        UUID userId = ITProfessional.getUserIdByEmail(email);
         LearningTrack track = LearningTrack.findById(trackId);
 
         var labs = new ArrayList<>(track.labs);
@@ -99,7 +100,7 @@ public class TrackProgressService {
 
 
     @Transactional
-    public UserLabProgress markLabCompleted(String email, Long labId, Long trackId) {        
+    public UserLabProgress markLabCompleted(String email, UUID labId, UUID trackId) {        
         ITProfessional user = ITProfessional.getUserByEmail(email);
         Lab lab = Lab.findById(labId);
 
@@ -176,7 +177,7 @@ public class TrackProgressService {
      * @return
      */
     @Transactional
-    public UserLabProgress enroll(String email, Long trackId) {
+    public UserLabProgress enroll(String email, UUID trackId) {
         ITProfessional user  = ITProfessional.getUserByEmail(email);
         LearningTrack track = LearningTrack.findById(trackId);
         // Check if already enrolled => find any progress row

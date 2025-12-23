@@ -5,6 +5,7 @@ import org.nextgen.model.UserBootcamp;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.nextgen.dto.BootcampEnrollmentCheckDTO;
 import org.nextgen.dto.UserBootcampDTO;
@@ -19,12 +20,23 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.QueryParam;
 
+/**
+ * Bootamp supported methods
+ * @Path("")                   getall : get all bootcamps
+ * @Path("{id}")               getBootCamp: get bootcamp by id
+ * @Path("/status/count")      getBootCampCountByStatus: List of <status:count>
+ * @Path("/starting/{weeks}")  getBootcampsStartingWithin : starting within weeks
+ */
 @Path("/bootcamp")
 public class BootcampController {
     
     @Inject
     BootcampService bootcampService;
 
+
+    // ========================
+    //  bootcamp functions.   |
+    // ========================
     @GET
     @Path("")
     public List<Bootcamp> getall(){
@@ -34,7 +46,7 @@ public class BootcampController {
     @GET
     @Path("{id}")
     public Bootcamp getBootCamp(
-        @PathParam("id") Long id 
+        @PathParam("id") UUID id 
     ){
         return bootcampService.getBootcamp(id);
     }
@@ -54,31 +66,9 @@ public class BootcampController {
     }
 
     @GET
-    @Path("/user")
-    public List<UserBootcampDTO> getUserBootcamps(
-        @QueryParam("email") String email
-    ){
-        return bootcampService.findBootcampsByUser(email);
-    }
-
-    /**
-     * 
-     * @param id
-     * @param email
-     * @return example output 
-     *          {
-                "amIEnrolled": true,
-                "bootcampStartId": 1,
-                "capacity": 2,
-                "id": 1,
-                "numberOfApplicants": 1,
-                "status": "OPEN_FOR_ENROLLMENT"
-                }
-     */
-    @GET
     @Path("{id}/ready")
     public Optional<BootcampEnrollmentCheckDTO> isBootcampReadyForEnrollment(
-        @PathParam("id") Long id,
+        @PathParam("id") UUID id,
         @QueryParam("email") String email
     ){
          return bootcampService.isBootcampReadyForEnrollment(id,email);
@@ -88,31 +78,51 @@ public class BootcampController {
     @POST
     @Path("/{bootcampId}/status")
     public BootcampStart setBootCampStatus(
-        @PathParam("bootcampId") Long bootcampStartId,
+        @PathParam("bootcampId") UUID bootcampStartId,
         @QueryParam("status") String status
     ){
         return bootcampService.setStatus(bootcampStartId,status);
     }
 
-
-    @POST
-    @Path("/{bootcampId}/enroll")
-    public UserBootcamp enroll(
-        @PathParam("bootcampId") Long bootcampId,
-        @QueryParam("email") String email
-    ) {
-        return bootcampService.enrollUser(email, bootcampId);
-    }
-
     @POST
     @Path("/{bootcampId}/start")
     public BootcampStart startBootcamp(
-        @PathParam("bootcampId") Long bootcampId,
+        @PathParam("bootcampId") UUID bootcampId,
         @QueryParam("email") String email,
         @QueryParam("cohortName") String cohortName
     ){
         return bootcampService.startBootcamp(bootcampId, cohortName, email);
     }
     
+    // ============================
+    // user bootcamp functions.   |
+    // ============================
 
+    @GET
+    @Path("/user")
+    public List<UserBootcampDTO> getUserBootcamps(
+        @QueryParam("email") String email
+    ){
+        return bootcampService.findBootcampsByUser(email);
+    }
+
+    @POST
+    @Path("/{bootcampId}/enroll")
+    public UserBootcamp enroll(
+        @PathParam("bootcampId") UUID bootcampId,
+        @QueryParam("email") String email
+    ) {
+        return bootcampService.enrollUser(email, bootcampId);
+    }    
+
+    @GET
+    @Path("/user/{userBootcampId}")
+    public org.nextgen.dto.bootcamp.UserBootcampDTO getUserBootcamp(
+            @PathParam("userBootcampId") UUID userBootcampId
+    ){
+        System.out.println(userBootcampId);
+        return bootcampService.getUserBootcamp(userBootcampId);
+        
+    }
+    
 }

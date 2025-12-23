@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.nextgen.model.ExerciseSubmission;
 import org.nextgen.model.ITProfessional;
@@ -13,7 +14,7 @@ import org.nextgen.model.UserLabProgress;
 @ApplicationScoped
 public class LabService {
     
-    public Lab getLabById(Long id) {
+    public Lab getLabById(UUID id) {
         return Lab.findById(id);
     }
     
@@ -27,7 +28,7 @@ public class LabService {
      * @param userId    // user email
      * @return
      */
-    public Map<Object,Object> getLabWithProgress(Long LabId, String userId){
+    public Map<Object,Object> getLabWithProgress(UUID LabId, String userId){
         Map<Object,Object> map = new HashMap<Object,Object>();
         Lab lab = Lab.findById(LabId);
         map.put("lab", lab);

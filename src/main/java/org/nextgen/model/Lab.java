@@ -1,6 +1,8 @@
 package org.nextgen.model;
 
 import java.util.List;
+import java.util.UUID;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -69,7 +71,7 @@ public class Lab extends BaseRewardable {
      * * @param userId The ID of the ITProfessional user.
      * @return List<Object[]> where each element is [Lab, Long totalEarnedPoints].
      */
-    public static List<Object[]> findLabsWithTotalEarnedPoints(Long userId) {
+    public static List<Object[]> findLabsWithTotalEarnedPoints(UUID userId) {
         EntityManager em = Lab.getEntityManager();
         
         // The query groups results by Lab, summing points from submissions 
@@ -100,7 +102,7 @@ public class Lab extends BaseRewardable {
      * @param learningTrackId The ID of the LearningTrack to filter by.
      * @return List<Object[]> where each element is [Lab, Long totalEarnedPoints].
      */
-    public static List<Object[]> findLabsWithTotalEarnedPointsByTrack(Long userId, Long learningTrackId) {
+    public static List<Object[]> findLabsWithTotalEarnedPointsByTrack(UUID userId, UUID learningTrackId) {
         EntityManager em = Lab.getEntityManager();
         
         // The query groups results by Lab, summing points from submissions 

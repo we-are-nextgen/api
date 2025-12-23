@@ -6,6 +6,8 @@ import jakarta.ws.rs.PathParam;
 import jakarta.inject.Inject;
 
 import java.util.List;
+import java.util.UUID;
+
 import org.nextgen.model.ITProfessional;
 import org.nextgen.service.UserProfileService;
 
@@ -22,7 +24,7 @@ public class UserProfileController {
 
     @GET
     @Path("/{id}")
-    public ITProfessional get(@PathParam("id") long id) {
+    public ITProfessional get(@PathParam("id") UUID id) {
         return userProfileService.getById(id);
     }
 

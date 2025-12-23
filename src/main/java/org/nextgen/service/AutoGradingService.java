@@ -26,7 +26,7 @@ public class AutoGradingService {
         ITProfessional user = ITProfessional.getUserByEmail(labSubmissionDTO.userId);
         List<ExerciseSubmissionDTO> submissions = labSubmissionDTO.submissions;
 
-        Map<Long, ExerciseSubmissionDTO> results = new HashMap<>();
+        Map<UUID, ExerciseSubmissionDTO> results = new HashMap<>();
 
         for (Exercise ex : lab.exercises) {
             ExerciseSubmissionDTO sub = submissions.stream()

@@ -1,6 +1,8 @@
 package org.nextgen.service;
 
 import java.util.List;
+import java.util.UUID;
+
 import jakarta.enterprise.context.ApplicationScoped;
 
 
@@ -13,7 +15,7 @@ public class UserProfileService {
         return ITProfessional.listAll();
     }
 
-    public ITProfessional getById(Long id) {
+    public ITProfessional getById(UUID id) {
         return ITProfessional.findById(id);
     }
 

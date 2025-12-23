@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Table(name = "bootcamp_start")
@@ -47,7 +48,8 @@ public class BootcampStart extends BaseEntity {
     @Enumerated(EnumType.STRING)
     public STATUS status;
 
-    public static BootcampStart start(String email, Long bootcampId, String cohortName) {
+
+    public static BootcampStart start(String email, UUID bootcampId, String cohortName) {
         BootcampStart s = new BootcampStart();
         s.user = ITProfessional.getUserByEmail(email);
         s.bootcamp = Bootcamp.findById(bootcampId);

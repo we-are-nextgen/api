@@ -2,6 +2,7 @@ package org.nextgen.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.nextgen.dto.LabSubmissionDTO;
 import org.nextgen.model.Lab;
@@ -38,14 +39,14 @@ public class LabController {
 
     @GET
     @Path("/{id}")
-    public Lab get(@PathParam("id") long id) {
+    public Lab get(@PathParam("id") UUID id) {
         return labService.getLabById(id);
     }
 
     @GET
     @Path("/progress/{id}")
     public Response getWithProgress(
-            @PathParam("id") long id,
+            @PathParam("id") UUID id,
             @QueryParam("email") String email
     ) {
         return Response.ok(

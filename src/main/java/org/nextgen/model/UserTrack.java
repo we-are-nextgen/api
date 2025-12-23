@@ -1,6 +1,7 @@
 package org.nextgen.model;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.nextgen.model.Observers.BadgeRewardObserver;
 import jakarta.json.bind.annotation.JsonbTransient;
@@ -30,13 +31,13 @@ public class UserTrack extends BaseProgress {
     public LearningTrack track;
 
     @Column(name = "learning_track_id")
-    public Long learningTrackId;
+    public UUID learningTrackId;
 
-    public Long getLearningTrackId() {
+    public UUID getLearningTrackId() {
         return learningTrackId;
     }
 
-    public void setLearningTrackId(Long learningTrackId) {
+    public void setLearningTrackId(UUID learningTrackId) {
         this.learningTrackId = learningTrackId;
     }
 

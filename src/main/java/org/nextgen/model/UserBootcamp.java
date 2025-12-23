@@ -1,10 +1,8 @@
 package org.nextgen.model;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import org.nextgen.dto.UserBootcampDTO;
-
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -17,13 +15,16 @@ public class UserBootcamp extends BaseProgress {
     
     @ManyToOne
     @JoinColumn(name = "bootcamp_start_id")
-    BootcampStart bootcampStart;
+    @JsonbTransient
+    public BootcampStart bootcampStart;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    ITProfessional user;
+    @JsonbTransient
+    public ITProfessional user;
 
 
+    
     @Column(name = "join_date")
     public LocalDateTime joinDate;
 

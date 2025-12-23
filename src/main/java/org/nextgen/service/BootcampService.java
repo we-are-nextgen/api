@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.nextgen.dto.BootcampEnrollmentCheckDTO;
@@ -15,6 +16,7 @@ import org.nextgen.model.UserBootcamp;
 
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import jakarta.enterprise.context.ApplicationScoped;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -23,6 +25,8 @@ import jakarta.transaction.Transactional;
 public class BootcampService {
     @PersistenceContext
     EntityManager em;
+    
+
 
     /**
      * get count of all bootcamps in the system
@@ -87,7 +91,8 @@ public class BootcampService {
                 bs.startedAt,
                 bs.cohortName,
                 bc.durationWeeks,
-                bs.id
+                bs.id,
+                ub.id
             )
             FROM UserBootcamp ub
             JOIN ub.bootcampStart bs
@@ -104,12 +109,12 @@ public class BootcampService {
      * @param id
      * @return
      */
-    public Bootcamp getBootcamp(Long id){
+    public Bootcamp getBootcamp(UUID id){
         return Bootcamp.findById(id);
     }
 
 
-    public Optional<BootcampEnrollmentCheckDTO> isBootcampReadyForEnrollment(Long id, String email){
+    public Optional<BootcampEnrollmentCheckDTO> isBootcampReadyForEnrollment(UUID id, String email){
         List<BootcampEnrollmentCheckDTO> result = em.createQuery("""
             SELECT new org.nextgen.dto.BootcampEnrollmentCheckDTO(
                 b.id,
@@ -128,30 +133,49 @@ public class BootcampService {
         .setParameter("bootcampId", id)
         .setParameter("status", BootcampStart.STATUS.OPEN_FOR_ENROLLMENT)
         .getResultList();
-        
         // check if user already enrolled 
-
         Optional<BootcampEnrollmentCheckDTO> bootcampEnrollmentCheckDTO = result.stream().findFirst();
         if(!bootcampEnrollmentCheckDTO.isEmpty()) {
             bootcampEnrollmentCheckDTO.ifPresent(dto -> 
                 {
                     ITProfessional user = ITProfessional.getUserByEmail(email);
-                    BootcampStart bootcampStart = BootcampStart.find("bootcamp.id=?1",dto.bootcampStartId).firstResult();
+                    BootcampStart bootcampStart = BootcampStart.findById(dto.bootcampStartId);
                     UserBootcamp userBootcamp = UserBootcamp.findByUserAndBootcampStart(bootcampStart, user);
                     dto.amIEnrolled=(userBootcamp != null);
+                    dto.userBootcampId = (userBootcamp != null)?userBootcamp.id:null;
                 }
             );
         }
         return bootcampEnrollmentCheckDTO;
     }
 
+     /**
+     * get User Bootcamp by Id
+     * @param userBootcampId
+     * @return
+     */
+    public org.nextgen.dto.bootcamp.UserBootcampDTO getUserBootcamp(UUID userBootcampId){
+        UserBootcamp userBootcamp = UserBootcamp.find("""
+            select ub
+            from UserBootcamp ub
+            join fetch ub.bootcampStart bs
+            join fetch bs.bootcamp
+            where ub.id = ?1
+        """, userBootcampId).singleResult();
+        return org.nextgen.dto.bootcamp.UserBootcampDTO.tDto(userBootcamp);
+    }
+
+    // ==========================
+    // Transactional 
+    // ==========================
+
     @Transactional
-    public BootcampStart startBootcamp(Long bootcampId, String cohortName, String email){
+    public BootcampStart startBootcamp(UUID bootcampId, String cohortName, String email){
         return BootcampStart.start(email, bootcampId, cohortName);
     }
 
     @Transactional
-    public BootcampStart setStatus(Long bootcampStartId, String satus){
+    public BootcampStart setStatus(UUID bootcampStartId, String satus){
         BootcampStart bootcampStart = BootcampStart.findById(bootcampStartId);
         bootcampStart.status = BootcampStart.STATUS.valueOf(satus);
         bootcampStart.persist();
@@ -159,7 +183,7 @@ public class BootcampService {
     }
 
     @Transactional
-    public UserBootcamp enrollUser(String email,Long bootcampStartId){
+    public UserBootcamp enrollUser(String email,UUID bootcampStartId){
         ITProfessional user = ITProfessional.getUserByEmail(email);
         BootcampStart bootcampStart = BootcampStart.findById(bootcampStartId);
         UserBootcamp userBootcamp = UserBootcamp.findByUserAndBootcampStart(bootcampStart, user);
@@ -169,5 +193,7 @@ public class BootcampService {
         userBootcamp.persist();
         return userBootcamp;
     }
+
+   
     
 }

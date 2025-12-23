@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Enable UserProfile JPA entity defined as a Panache Entity.
@@ -49,7 +50,7 @@ public class ITProfessional extends BaseEntity {
      * @param email
      * @return
      */
-    public static Long getUserIdByEmail(String email) {
+    public static UUID getUserIdByEmail(String email) {
         ITProfessional user = ITProfessional.find("userId", email).firstResult();
         if (user != null) {
             return user.id;
@@ -72,7 +73,7 @@ public class ITProfessional extends BaseEntity {
      * @param stageId
      * @return
      */
-    public static long countByStage(Long stageId) {
+    public static long countByStage(UUID stageId) {
         return ITProfessional.count("stage.id", stageId);
     }
         

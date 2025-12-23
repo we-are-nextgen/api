@@ -7,6 +7,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.util.List;
+import java.util.UUID;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,7 +23,8 @@ public class ExerciseSubmission extends BaseEntity {
     public Exercise exercise;
 
     @Column(name = "exercise_id", insertable=false, updatable=false)
-    public Long exerciseId;
+    public UUID exerciseId;
+
 
     @Column(columnDefinition = "TEXT")
     public String answer;

@@ -1,6 +1,8 @@
 package org.nextgen.model;
 
 import java.util.List;
+import java.util.UUID;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.JoinColumn;
@@ -87,11 +89,11 @@ public class LearningTrack extends BaseRewardable {
         return list("domain.name", domainName);
     }
 
-    public static List<LearningTrack> findByDomainId(Long domainId) {
+    public static List<LearningTrack> findByDomainId(UUID domainId) {
         return list("domain.id", domainId);
     }
 
-    public static List<LearningTrack> findByDomainPaginated(Long domainId, int page, int pageSize) {
+    public static List<LearningTrack> findByDomainPaginated(UUID domainId, int page, int pageSize) {
     return find("domain.id", domainId)
             .page(page, pageSize)
             .list();
@@ -103,7 +105,7 @@ public class LearningTrack extends BaseRewardable {
      * @param learningTrackId The ID of the LearningTrack to filter by.
      * @return The total sum of earned points as a Long.
      */
-    public static Long findTotalEarnedPointsByTrack(Long userId, Long learningTrackId) {
+    public static Long findTotalEarnedPointsByTrack(UUID userId, UUID learningTrackId) {
         EntityManager em = LearningTrack.getEntityManager();
         
         // JPQL Query: SELECT the SUM of earnedPoints

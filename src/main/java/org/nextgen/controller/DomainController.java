@@ -7,6 +7,8 @@ import jakarta.ws.rs.PathParam;
 import jakarta.inject.Inject;
 
 import java.util.List;
+import java.util.UUID;
+
 import org.nextgen.model.Domain;
 import org.nextgen.service.DomainService;
 
@@ -24,7 +26,7 @@ public class DomainController {
 
     @GET
     @Path("/{id}")
-    public Domain get(@PathParam("id") long id) {
+    public Domain get(@PathParam("id") UUID id) {
         return domainService.getDomainById(id);
     }
 

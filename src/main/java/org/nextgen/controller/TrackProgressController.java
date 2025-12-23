@@ -10,6 +10,8 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.UUID;
+
 import org.nextgen.dto.TrackProgressDTO;
 import org.nextgen.model.UserLabProgress;
 import org.nextgen.service.TrackProgressService;
@@ -24,8 +26,8 @@ public class TrackProgressController {
     @GET
     @Path("/{trackId}/user/{userId}")
     public TrackProgressDTO getProgress(
-        @PathParam("trackId") Long trackId,
-        @PathParam("userId") Long userId) 
+        @PathParam("trackId") UUID trackId,
+        @PathParam("userId") UUID userId) 
     {
         return progressService.getProgress(userId, trackId);
     }
@@ -34,7 +36,7 @@ public class TrackProgressController {
     @Path("/email")
     public TrackProgressDTO getProgressByEmail(
             @QueryParam("email") String email,
-            @QueryParam("trackId") Long trackId) {
+            @QueryParam("trackId") UUID trackId) {
         return progressService.getProgressByEmail(email, trackId);
     }
 
@@ -42,7 +44,7 @@ public class TrackProgressController {
     @POST
     @Path("/{trackId}/enroll")
     public UserLabProgress enroll(
-        @PathParam("trackId") Long trackId,
+        @PathParam("trackId") UUID trackId,
         @QueryParam("email") String email
     ) {
         return progressService.enroll(email, trackId);
@@ -51,8 +53,8 @@ public class TrackProgressController {
     @POST
     @Path("/lab/complete/{labId}")
     public Response markCompleted(
-            @PathParam("labId") long labId,
-            @QueryParam("trackId") long trackId,
+            @PathParam("labId") UUID labId,
+            @QueryParam("trackId") UUID trackId,
             @QueryParam("email") String email
     ) {
         var updated = progressService.markLabCompleted(email, labId, trackId);

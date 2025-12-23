@@ -1,6 +1,7 @@
 package org.nextgen.model;
 
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,13 +39,13 @@ public class Milestone extends BaseRewardable {
     public Stage stage;
 
     @Column(name = "stage_id")
-    public Long stageId;   // <-- reference only ID
+    public UUID stageId;   // <-- reference only ID
 
-    public Long getStageId() {
+    public UUID getStageId() {
         return stageId;
     }
 
-    public void setStageId(Long stageId) {
+    public void setStageId(UUID stageId) {
         this.stageId = stageId;
     }
 

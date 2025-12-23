@@ -2,6 +2,7 @@ package org.nextgen.model;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import org.nextgen.model.Observers.BadgeRewardObserver;
 
@@ -26,14 +27,14 @@ public class UserLabProgress extends BaseProgress {
     public LearningTrack track;
 
     @Column(name = "track_id", insertable=false, updatable=false)
-    public Long learninTrackId;
+    public UUID learninTrackId;
 
     @ManyToOne
     @JsonbTransient
     public Lab lab;
 
     @Column(name = "lab_id", insertable=false, updatable=false)
-    public Long labId;
+    public UUID labId;
 
     public Boolean completed;
 

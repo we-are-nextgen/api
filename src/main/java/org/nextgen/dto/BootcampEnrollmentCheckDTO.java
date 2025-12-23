@@ -1,18 +1,21 @@
 package org.nextgen.dto;
 
+import java.util.UUID;
+
 import org.nextgen.model.BootcampStart;
 
 public class BootcampEnrollmentCheckDTO { 
-    public Long id;
-    public Long bootcampStartId;
+    public UUID id;
+    public UUID bootcampStartId;
     public BootcampStart.STATUS status;
     public Integer capacity;
     public Long numberOfApplicants;
     public boolean amIEnrolled;
+    public UUID userBootcampId;
 
     BootcampEnrollmentCheckDTO (
-                                Long id,
-                                Long bootcampStartId,
+                                UUID id,
+                                UUID bootcampStartId,
                                 BootcampStart.STATUS status,
                                 Integer capacity,
                                 Long numberOfApplicants){

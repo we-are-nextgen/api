@@ -11,13 +11,11 @@ import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.jgit.api.Git;
-import org.jboss.logging.Logger;
 import org.nextgen.dto.importer.BootcampYamlDTO;
 import org.nextgen.dto.importer.BootcampYamlDTO.LayerDTO;
 import org.nextgen.dto.importer.BootcampYamlDTO.ModuleDTO;
@@ -46,7 +44,7 @@ public class ImportBootcampService {
             .setDirectory(cloneDir.toFile())
             .setBranch(dto.gitBranch)
             .call();
-
+            
         // 2. Resolve gitPath inside repo
         File pathInsideRepo = dto.gitPath == null || dto.gitPath.isBlank() ?
                 cloneDir.toFile() :

@@ -1,6 +1,8 @@
 package org.nextgen.service;
 
 import java.util.List;
+import java.util.UUID;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -22,11 +24,11 @@ public class JourneyService {
         return Journey.listAll();
     }
 
-    public Journey getByJourneyId(Long id) {
+    public Journey getByJourneyId(UUID id) {
         return Journey.findById(id);
     }
 
-    public Journey updateJourney(Long id, String name, String description) {
+    public Journey updateJourney(UUID id, String name, String description) {
         Journey journey = Journey.findById(id);
         if (journey != null) {
             journey.name = name;
@@ -36,7 +38,7 @@ public class JourneyService {
         return journey;
     }
 
-    public Journey deleteJourneyEntity(Long id) {
+    public Journey deleteJourneyEntity(UUID id) {
         Journey journey = Journey.findById(id);
         if (journey != null) {
             journey.delete();

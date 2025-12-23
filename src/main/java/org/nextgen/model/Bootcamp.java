@@ -20,6 +20,7 @@ import java.util.List;
 @Entity
 @Table (name = "bootcamp" )
 public class Bootcamp extends BaseRewardable {
+
     public String name;
     public String version;
     public String description;

@@ -8,14 +8,24 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import java.util.UUID;
+
+import org.hibernate.annotations.UuidGenerator;
 
 
 @MappedSuperclass
 public class BaseEntity extends PanacheEntityBase {
 
+    /* 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    public Long id; */
+    @Id
+    @GeneratedValue
+    @UuidGenerator
+    public UUID id;
+    
+
     // audit records
     @Column(name = "create_date")
     public LocalDateTime createDate = LocalDateTime.now();

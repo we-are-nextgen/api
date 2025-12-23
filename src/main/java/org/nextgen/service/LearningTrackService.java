@@ -1,6 +1,7 @@
 package org.nextgen.service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.HashMap;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -19,24 +20,24 @@ public class LearningTrackService {
         return LearningTrack.findByDomainName(domainName);
     }
 
-    public List<LearningTrack> getLearningTracksByDomainId(Long domainId) {
+    public List<LearningTrack> getLearningTracksByDomainId(UUID domainId) {
         return LearningTrack.findByDomainId(domainId);
     }
 
-    public  HashMap<Object,Object> getLearningTracksByDomainPaged(Long domainId, int page, int pageSize) {
+    public  HashMap<Object,Object> getLearningTracksByDomainPaged(UUID domainId, int page, int pageSize) {
         HashMap<Object,Object> result = new HashMap<Object,Object> ();
         result.put("count", LearningTrack.count());
         result.put("tracks",  LearningTrack.findByDomainPaginated(domainId,page,pageSize));
         return result;
     }
     
-    public LearningTrack getLearningTrackById(Long id) {
+    public LearningTrack getLearningTrackById(UUID id) {
         return LearningTrack.findById(id);
     }
 
     
     @Transactional
-    public LearningTrack updateLearningTrack(Long id, String name, String description, String icon) {
+    public LearningTrack updateLearningTrack(UUID id, String name, String description, String icon) {
         LearningTrack learningTrack = LearningTrack.findById(id);
         if (learningTrack != null) {
             learningTrack.name = name;
@@ -48,7 +49,7 @@ public class LearningTrackService {
     }
 
     @Transactional
-    public LearningTrack deleteLearningTrack(Long id) {
+    public LearningTrack deleteLearningTrack(UUID id) {
         LearningTrack learningTrack = LearningTrack.findById(id);
         if (learningTrack != null) {
             learningTrack.delete();

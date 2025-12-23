@@ -1,3 +1,9 @@
+-- Activities
+insert into Activity (id, name, description) values (1, 'Learning Track', 'Learning Track');
+insert into Activity (id, name, description) values (2, 'Bootcamp', 'Bootcamp');
+insert into Activity (id, name, description) values (3, 'Hackathon', 'Hackathon');
+
+
 -- Tracks and Profiles
 
 insert into domain (id, name, description, community, icon) values (1, 'Software & Application Engineering', 'Building and maintaining applications and services', 'Contribute to startup MVPs, open-source projects, or product incubators','Code2');
@@ -163,21 +169,26 @@ insert into stage (id, sequence, name, description, icon, journey_id) values (3,
 insert into stage (id, sequence, name, description, icon, journey_id) values (4,4, 'Growth', 'Mentorship & Leadership','Users',1);
 insert into stage (id, sequence, name, description, icon, journey_id) values (5,5, 'Impact', 'Career & Global Influence','TrendingUp',1);
 
-insert into milestone (id, name, description, stage_id) values (1, 'Join the community, set up profile', 'Join the community, set up profile',1);
-insert into milestone (id, name, description, stage_id) values (2, 'Enroll in bootcamps & hands-on labs', 'Enroll in bootcamps & hands-on labs',1);
-insert into milestone (id, name, description, stage_id) values (3, 'Work toward certifications', 'Work toward certifications',1);
-insert into milestone (id, name, description, stage_id) values (4, 'Join hackathons & coding challenges', 'Join hackathons & coding challenges',2);
-insert into milestone (id, name, description, stage_id) values (5, 'Work on customer use-case simulations', 'Work on customer use-case simulations',2);
-insert into milestone (id, name, description, stage_id) values (6, 'Start building GitHub portfolio', 'Start building GitHub portfolio',2);
-insert into milestone (id, name, description, stage_id) values (7, 'Contribute to open source projects', 'Contribute to open source projects',3);
-insert into milestone (id, name, description, stage_id) values (8, 'Join team incubators (cross-functional squads)', 'Join team incubators (cross-functional squads)',3);
-insert into milestone (id, name, description, stage_id) values (9, 'Build reputation via successful contributions', 'Build reputation via successful contributions',3);
-insert into milestone (id, name, description, stage_id) values (10, 'Become a mentor for new members', 'Become a mentor for new members',4);
-insert into milestone (id, name, description, stage_id) values (11, 'Publish blogs, give talks, advocate technologies', 'Publish blogs, give talks, advocate technologies',4);
-insert into milestone (id, name, description, stage_id) values (12, 'Guide teams & incubators', 'Guide teams & incubators',4);
-insert into milestone (id, name, description, stage_id) values (13, 'Land jobs or build startups', 'Land jobs or build startups',5);
-insert into milestone (id, name, description, stage_id) values (14, 'Launch impactful community projects', 'Launch impactful community projects',5);
-insert into milestone (id, name, description, stage_id) values (15, 'Scale contributions across industries', 'Scale contributions across industries',5);
+insert into milestone (id, sequence, required_points, name, description, stage_id) values  (1, 1, 1,   'Join the community, set up profile', 'Join the community, set up profile',1);
+insert into milestone (id, sequence, required_points, name, description, stage_id, skippable) values (2, 2, 10, 'Enroll in bootcamps & hands-on labs', 'Enroll in bootcamps & hands-on labs',1,false);
+insert into milestone_activity (milestone_id,Activity_id) values (2,1);
+insert into milestone_activity (milestone_id,Activity_id) values (2,2);
+insert into milestone_activity (milestone_id,Activity_id) values (2,3);
+insert into milestone (id, sequence, required_points, name, description, stage_id, skippable) values (3, 3, 300, 'Work toward certifications', 'Work toward certifications',1,true);
+
+
+insert into milestone (id, sequence, name, description, stage_id) values (4, 4, 'Join hackathons & coding challenges', 'Join hackathons & coding challenges',2);
+insert into milestone (id, sequence, name, description, stage_id) values (5, 5, 'Work on customer use-case simulations', 'Work on customer use-case simulations',2);
+insert into milestone (id, sequence, name, description, stage_id) values (6, 6, 'Start building GitHub portfolio', 'Start building GitHub portfolio',2);
+insert into milestone (id, sequence, name, description, stage_id) values (7, 7, 'Contribute to open source projects', 'Contribute to open source projects',3);
+insert into milestone (id, sequence, name, description, stage_id) values (8, 8, 'Join team incubators (cross-functional squads)', 'Join team incubators (cross-functional squads)',3);
+insert into milestone (id, sequence, name, description, stage_id) values (9, 9, 'Build reputation via successful contributions', 'Build reputation via successful contributions',3);
+insert into milestone (id, sequence, name, description, stage_id) values (10, 10, 'Become a mentor for new members', 'Become a mentor for new members',4);
+insert into milestone (id, sequence, name, description, stage_id) values (11, 11, 'Publish blogs, give talks, advocate technologies', 'Publish blogs, give talks, advocate technologies',4);
+insert into milestone (id, sequence, name, description, stage_id) values (12, 12, 'Guide teams & incubators', 'Guide teams & incubators',4);
+insert into milestone (id, sequence, name, description, stage_id) values (13, 13, 'Land jobs or build startups', 'Land jobs or build startups',5);
+insert into milestone (id, sequence, name, description, stage_id) values (14, 14, 'Launch impactful community projects', 'Launch impactful community projects',5);
+insert into milestone (id, sequence, name, description, stage_id) values (15, 15, 'Scale contributions across industries', 'Scale contributions across industries',5);
 
 
 insert into journey(id, name, title, description) values (2, 'Recruiter', 'Discover, invest in, and hire top talent while building your brand in the community through 5 strategic stages.', 'Discover, invest in, and hire top talent while building your brand in the community.');
@@ -187,22 +198,22 @@ insert into stage (id, sequence, name, description, icon, journey_id) values (8,
 insert into stage (id, sequence, name, description, icon, journey_id) values (9,4, 'Branding', 'Build Reputation','Award',2);
 insert into stage (id, sequence, name, description, icon, journey_id) values (10,5, 'Hiring Outcomes', 'Measure Success','Briefcase',2);
 
-insert into milestone (id, name, description, stage_id) values (16, 'Create company & recruiter profiles', 'Create company & recruiter profiles',6);
-insert into milestone (id, name, description, stage_id) values (17, 'Select skill investment interests', 'Select skill investment interests',6);
-insert into milestone (id, name, description, stage_id) values (18, 'Get an overview of CV bank & talent pool', 'Get an overview of CV bank & talent pool',6);
-insert into milestone (id, name, description, stage_id) values (19, 'Explore CV bank with filters (skills, projects, certifications)', 'Explore CV bank with filters (skills, projects, certifications)',7);
-insert into milestone (id, name, description, stage_id) values (20, 'Use AI matching to find rising talent', 'Use AI matching to find rising talent',7);
-insert into milestone (id, name, description, stage_id) values (21, 'Shortlist candidates & build pipelines', 'Shortlist candidates & build pipelines',7);
-insert into milestone (id, name, description, stage_id) values (22, 'Sponsor incubators (AI, Cloud, Security, etc.)', 'Sponsor incubators (AI, Cloud, Security, etc.)',8);
-insert into milestone (id, name, description, stage_id) values (23, 'Fund hackathons and coding challenges', 'Fund hackathons and coding challenges',8);
-insert into milestone (id, name, description, stage_id) values (24, 'Submit skill investment/resource proposals', 'Submit skill investment/resource proposals',8);
-insert into milestone (id, name, description, stage_id) values (25, 'Arrange private hiring competitions', 'Arrange private hiring competitions',8);
-insert into milestone (id, name, description, stage_id) values (26, 'Host webinars, AMAs, and community events', 'Host webinars, AMAs, and community events',9);
-insert into milestone (id, name, description, stage_id) values (27, 'Gain visibility as a top recruiter', 'Gain visibility as a top recruiter',9);
-insert into milestone (id, name, description, stage_id) values (28, 'Share success stories of hires', 'Share success stories of hires',9);
-insert into milestone (id, name, description, stage_id) values (29, 'Hire top-performing developers', 'Hire top-performing developers',10);
-insert into milestone (id, name, description, stage_id) values (30, 'Track ROI of sponsored programs', 'Track ROI of sponsored programs',10);
-insert into milestone (id, name, description, stage_id) values (31, 'Establish long-term brand recognition in the community', 'Establish long-term brand recognition in the community',10);
+insert into milestone (id, sequence, name, description, stage_id) values (16, 1, 'Create company & recruiter profiles', 'Create company & recruiter profiles',6);
+insert into milestone (id, sequence, name, description, stage_id) values (17, 2, 'Select skill investment interests', 'Select skill investment interests',6);
+insert into milestone (id, sequence, name, description, stage_id) values (18, 3, 'Get an overview of CV bank & talent pool', 'Get an overview of CV bank & talent pool',6);
+insert into milestone (id, sequence, name, description, stage_id) values (19, 4, 'Explore CV bank with filters (skills, projects, certifications)', 'Explore CV bank with filters (skills, projects, certifications)',7);
+insert into milestone (id, sequence, name, description, stage_id) values (20, 5, 'Use AI matching to find rising talent', 'Use AI matching to find rising talent',7);
+insert into milestone (id, sequence, name, description, stage_id) values (21, 6, 'Shortlist candidates & build pipelines', 'Shortlist candidates & build pipelines',7);
+insert into milestone (id, sequence, name, description, stage_id) values (22, 7, 'Sponsor incubators (AI, Cloud, Security, etc.)', 'Sponsor incubators (AI, Cloud, Security, etc.)',8);
+insert into milestone (id, sequence, name, description, stage_id) values (23, 8, 'Fund hackathons and coding challenges', 'Fund hackathons and coding challenges',8);
+insert into milestone (id, sequence, name, description, stage_id) values (24, 9, 'Submit skill investment/resource proposals', 'Submit skill investment/resource proposals',8);
+insert into milestone (id, sequence, name, description, stage_id) values (25, 10, 'Arrange private hiring competitions', 'Arrange private hiring competitions',8);
+insert into milestone (id, sequence, name, description, stage_id) values (26, 11, 'Host webinars, AMAs, and community events', 'Host webinars, AMAs, and community events',9);
+insert into milestone (id, sequence, name, description, stage_id) values (27, 12, 'Gain visibility as a top recruiter', 'Gain visibility as a top recruiter',9);
+insert into milestone (id, sequence, name, description, stage_id) values (28, 13, 'Share success stories of hires', 'Share success stories of hires',9);
+insert into milestone (id, sequence, name, description, stage_id) values (29, 14, 'Hire top-performing developers', 'Hire top-performing developers',10);
+insert into milestone (id, sequence, name, description, stage_id) values (30, 15, 'Track ROI of sponsored programs', 'Track ROI of sponsored programs',10);
+insert into milestone (id, sequence, name, description, stage_id) values (31, 16, 'Establish long-term brand recognition in the community', 'Establish long-term brand recognition in the community',10);
 
 
 insert into journey(id, name, title, description) values (3, 'Startup', 'Build your MVP, access talent, and scale your product with community support through 5 growth stages.', 'Build your MVP, access talent, and scale your product with community support and resources.');
@@ -212,35 +223,35 @@ insert into stage (id, sequence, name, description, icon, journey_id) values (13
 insert into stage (id, sequence, name, description, icon, journey_id) values (14,4, 'Growth', 'Community Integration','Network',3);
 insert into stage (id, sequence, name, description, icon, journey_id) values (15,5, 'Impact', 'Scale','Zap',3);
 
-insert into milestone (id, name, description, stage_id) values (32, 'Register as a startup in the community', 'Register as a startup in the community',11);
-insert into milestone (id, name, description, stage_id) values (33, 'Create a profile with vision, product idea, and current challenges', 'Create a profile with vision, product idea, and current challenges',11);
-insert into milestone (id, name, description, stage_id) values (34, 'Identify needed skills and technical gaps', 'Identify needed skills and technical gaps',11);
-insert into milestone (id, name, description, stage_id) values (35, 'Explore the developer CV bank and available talent pool', 'Explore the developer CV bank and available talent pool',11);
-insert into milestone (id, name, description, stage_id) values (36, 'Match with developers and mentors from the community', 'Match with developers and mentors from the community',12);
-insert into milestone (id, name, description, stage_id) values (37, 'Build small project teams for MVPs and proofs-of-concept', 'Build small project teams for MVPs and proofs-of-concept',12);
-insert into milestone (id, name, description, stage_id) values (38, 'Start collaborating on technical tasks and use cases', 'Start collaborating on technical tasks and use cases',12);
-insert into milestone (id, name, description, stage_id) values (39, 'Join the Startup Incubator Track', 'Join the Startup Incubator Track',13);
-insert into milestone (id, name, description, stage_id) values (40, 'Access infrastructure, labs, and architecture guidance', 'Access infrastructure, labs, and architecture guidance',13);
-insert into milestone (id, name, description, stage_id) values (41, 'Run hackathons to test concepts and attract contributors', 'Run hackathons to test concepts and attract contributors',13);
-insert into milestone (id, name, description, stage_id) values (42, 'Build and refine the first product (MVP)', 'Build and refine the first product (MVP)',13);
-insert into milestone (id, name, description, stage_id) values (43, 'Open source selected parts of the project for community adoption', 'Open source selected parts of the project for community adoption',14);
-insert into milestone (id, name, description, stage_id) values (44, 'Gain visibility through demo days, startup spotlight sessions, and blogs', 'Gain visibility through demo days, startup spotlight sessions, and blogs',14);
-insert into milestone (id, name, description, stage_id) values (45, 'Partner with recruiters to scale the team with specialized talent', 'Partner with recruiters to scale the team with specialized talent',14);
-insert into milestone (id, name, description, stage_id) values (46, 'Launch MVP to market with community support', 'Launch MVP to market with community support',15);
-insert into milestone (id, name, description, stage_id) values (47, 'Pitch to investors via community pitch events', 'Pitch to investors via community pitch events',15);
-insert into milestone (id, name, description, stage_id) values (48, 'Scale product and operations while maintaining talent pipeline', 'Scale product and operations while maintaining talent pipeline',15);
+insert into milestone (id, sequence, name, description, stage_id) values (32, 1, 'Register as a startup in the community', 'Register as a startup in the community',11);
+insert into milestone (id, sequence, name, description, stage_id) values (33, 2, 'Create a profile with vision, product idea, and current challenges', 'Create a profile with vision, product idea, and current challenges',11);
+insert into milestone (id, sequence, name, description, stage_id) values (34, 3, 'Identify needed skills and technical gaps', 'Identify needed skills and technical gaps',11);
+insert into milestone (id, sequence, name, description, stage_id) values (35, 4, 'Explore the developer CV bank and available talent pool', 'Explore the developer CV bank and available talent pool',11);
+insert into milestone (id, sequence, name, description, stage_id) values (36, 5, 'Match with developers and mentors from the community', 'Match with developers and mentors from the community',12);
+insert into milestone (id, sequence, name, description, stage_id) values (37, 6, 'Build small project teams for MVPs and proofs-of-concept', 'Build small project teams for MVPs and proofs-of-concept',12);
+insert into milestone (id, sequence, name, description, stage_id) values (38, 7, 'Start collaborating on technical tasks and use cases', 'Start collaborating on technical tasks and use cases',12);
+insert into milestone (id, sequence, name, description, stage_id) values (39, 8, 'Join the Startup Incubator Track', 'Join the Startup Incubator Track',13);
+insert into milestone (id, sequence, name, description, stage_id) values (40, 9, 'Access infrastructure, labs, and architecture guidance', 'Access infrastructure, labs, and architecture guidance',13);
+insert into milestone (id, sequence, name, description, stage_id) values (41, 10, 'Run hackathons to test concepts and attract contributors', 'Run hackathons to test concepts and attract contributors',13);
+insert into milestone (id, sequence, name, description, stage_id) values (42, 11, 'Build and refine the first product (MVP)', 'Build and refine the first product (MVP)',13);
+insert into milestone (id, sequence, name, description, stage_id) values (43, 12, 'Open source selected parts of the project for community adoption', 'Open source selected parts of the project for community adoption',14);
+insert into milestone (id, sequence, name, description, stage_id) values (44, 13, 'Gain visibility through demo days, startup spotlight sessions, and blogs', 'Gain visibility through demo days, startup spotlight sessions, and blogs',14);
+insert into milestone (id, sequence, name, description, stage_id) values (45, 14, 'Partner with recruiters to scale the team with specialized talent', 'Partner with recruiters to scale the team with specialized talent',14);
+insert into milestone (id, sequence, name, description, stage_id) values (46, 15, 'Launch MVP to market with community support', 'Launch MVP to market with community support',15);
+insert into milestone (id, sequence, name, description, stage_id) values (47, 16, 'Pitch to investors via community pitch events', 'Pitch to investors via community pitch events',15);
+insert into milestone (id, sequence, name, description, stage_id) values (48, 17, 'Scale product and operations while maintaining talent pipeline', 'Scale product and operations while maintaining talent pipeline',15);
 
 
 
-insert into itprofessional (id, userId, domain_id, stage_id, profile_id) values (1, 'waelibrahim2000@hotmail.com', 1, 2, 1);
-insert into user_progress (id, user_id, milestone_id,nextmilestone_id, prevProgress_id, startdate, closedate, status) values (
-            1, 1, 1, 2, null, CURRENT_DATE-10, CURRENT_DATE-8, 'Completed');
-insert into user_progress (id, user_id, milestone_id,nextmilestone_id, prevProgress_id, startdate, closedate, status) values (
-            2, 1, 2, 3, 1, CURRENT_DATE-7, CURRENT_DATE-4, 'Completed');
-insert into user_progress (id, user_id, milestone_id,nextmilestone_id, prevProgress_id, startdate, closedate, status) values (
-            3, 1, 3, 4, 2, CURRENT_DATE-4, CURRENT_DATE-3, 'Completed');
-insert into user_progress (id, user_id, milestone_id,nextmilestone_id, prevProgress_id, startdate, closedate, status) values (
-            4, 1, 4, 5, 3, CURRENT_DATE-3, null, 'In-Progress');
+insert into itprofessional (id, userId, domain_id, stage_id, profile_id) values (1, 'waelibrahim2000@hotmail.com', 1, 1, 1);
+insert into user_progress (id, user_id, milestone_id,nextmilestone_id, prevProgress_id, startdate, closedate, status, earned_points) values (
+            1, 1, 1, 2, null, CURRENT_DATE-10, CURRENT_DATE-8, 'Completed', 1);
+--insert into user_progress (id, user_id, milestone_id,nextmilestone_id, prevProgress_id, startdate, closedate, status) values (
+--            2, 1, 2, 3, 1, CURRENT_DATE-7, CURRENT_DATE-4, 'Completed');
+--insert into user_progress (id, user_id, milestone_id,nextmilestone_id, prevProgress_id, startdate, closedate, status) values (
+--            3, 1, 3, 4, 2, CURRENT_DATE-4, CURRENT_DATE-3, 'Completed');
+--insert into user_progress (id, user_id, milestone_id,nextmilestone_id, prevProgress_id, startdate, closedate, status) values (
+--            4, 1, 4, 5, 3, CURRENT_DATE-3, null, 'In-Progress');
 insert into user_profiles (user_id,profile_id) values (1,2);
 insert into user_profiles (user_id,profile_id) values (1,3);
 
@@ -254,110 +265,40 @@ insert into team_members (team_id, user_id) values (1,2);
 
 
 
-insert into badge (name, title, icon, trigger, rarity ) values ('Member','✅ Member', 'User', 'Registeration','common');
-insert into badge (name, title, icon, trigger, rarity ) values ('Active Member','💬 Active Member', 'Activity', '10+ posts/comments','rare');
-insert into badge (name, title, icon, trigger, rarity ) values ('Learner', '🟦 Learner','GraduationCap', 'Completing 3 onboarding milestones','epic');
+insert into badge (name, title, icon, rarity, rule_type, rule_value) values ('Member','✅ Member', 'User', 'common', 'COMPLETE_PROFILE','*');
+insert into badge (name, title, icon, rarity, rule_type, rule_value) values ('Learner','🟦 Learner','GraduationCap', 'epic','ENROLL_TO_TRACK','*');
 
-insert into badge (name, title, icon, trigger, rarity ) values ('Helper','🤝 Helper', 'MessageSquare', 'Help 5 members','legendary');
-insert into badge (name, title, icon, trigger, rarity ) values ('Mentor','🧑‍🏫 Mentor', 'Award', 'Provide verified mentoring','epic');
-insert into badge (name, title, icon, trigger, rarity ) values ('Team Player','🤜🤛 Team Player', 'Users', 'Participate in hackathon squad','rare');
+insert into badge (name, title, icon, rarity, rule_type, rule_value) values ('Active Member','💬 Active Member', 'Activity', 'rare', 'COMPLETE_TRACK', '*');
 
-
-insert into badge (name, title, icon, trigger, rarity ) values ('Practitioner', '🟩 Practitioner', 'Wrench', 'Completing real use-case tasks','epic');
-insert into badge (name, title, icon, trigger ) values ('Contributor','🟧 Contributor','Code-fork','Completing OSS or internal projects');
-insert into badge (name, title, icon, trigger ) values ('Leader','🟨 Leader','Crown','Community influence, job impact');
-
-insert into badge (name, title, icon, trigger ) values ('Streak Master','🔥 Streak Master','Flame','7 days or 30 days active learning');
-insert into badge (name, title, icon, trigger ) values ('Fast Climber','🏅 Fast Climber','Zap','Reach Stage 3 within 60 days');
-insert into badge (name, title, icon, trigger ) values ('Super Contributor','🚀 Super Contributor','','Publish 10+ contributions');
-insert into badge (name, title, icon, trigger ) values ('Top 5% Performer','🌟 Top 5% Performer','','Based on journey benchmarking');
-
-insert into user_badges (user_id,badge_id,awardedAt) values (1,1,'1/4/2025');
-insert into user_badges (user_id,badge_id,awardedAt) values (1,2,'5/15/2025');
-insert into user_badges (user_id,badge_id,awardedAt) values (1,3,'6/11/2025');
-insert into user_badges (user_id,badge_id,awardedAt) values (1,4,'7/24/2025');
-insert into user_badges (user_id,badge_id,awardedAt) values (1,5,'8/01/2025');
-insert into user_badges (user_id,badge_id,awardedAt) values (1,6,'9/13/2025');
-insert into user_badges (user_id,badge_id,awardedAt) values (1,7,'10/02/2025');
+insert into badge (name, title, icon, rarity, rule_type, rule_value) values ('Practitioner', '🟩 Practitioner', 'Wrench','epic', 'COMPLETE_LAB', 'CLP');
 
 
--- labs
-insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
-  ('HTML','HTML',0,120,1);
-
-insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
-  ('CSS','CSS',0,120,1);  
-
-insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
-  ('JavaScript','JavaScript is a programming language that allows web pages to be dynamic. It is an interpreted language, which means that it doesn''t need to be compiled: instead the interpreter (such as a web browser) will parse the code and turn it into code that their machine can run - suitable for creating dynamic websites that can run on any browser on any computer!',0,120,1);
-
-insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
-  ('TypeScript','TypeScript (TS) is a superset of JavaScript (JS), created at Microsoft in response to frustration developing large-scale applications in JS. In a large JS project, knowing what properties your own objects have, what arguments your functions take (and what type they need to be) can become difficult. Similarly, since there is no ability to intelligently inspect JS code, when you include a package (like from npm), you have to keep the documentation up so you know what methods are available and what arguments they take. TS solves these issues. It is currently an open-source project hosted on Github. It supports tools for any browser as well as Node, for any host, on any OS. TS compiles to readable, standards-based JavaScript.',1,180,1);
-
-insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
-  ('React','React.',1,180,1);
-
-insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
-  ('Next.JS','Next.JS',2,180,1);
-
-insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
-  ('Bootstrap','Bootstrap',1,180,1);
-
-insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
-  ('Angular','Angular',2,180,1);
-
-insert into learning_track (name, description, difficulty_level, estimated_time_min, domain_id) values 
-  ('Vue','Vue',1,180,1);
+insert into badge (name, title, icon, rarity ) values ('Helper','🤝 Helper', 'MessageSquare','legendary');
+insert into badge (name, title, icon, rarity ) values ('Mentor','🧑‍🏫 Mentor', 'Award', 'epic');
+insert into badge (name, title, icon, rarity ) values ('Team Player','🤜🤛 Team Player', 'Users','rare');
 
 
-insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
-  ('HTML Basics','Learn the basics of HTML.',60,0,1);
-insert into learning_track_labs (learning_track_id, lab_id) values (1,1);  
-insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
-  ('CSS Basics','Learn the basics of CSS.',60,0,1);
-insert into learning_track_labs (learning_track_id, lab_id) values (2,2);  
-insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
-  ('JavaScript Basics','Learn the basics of JavaScript.',90,0,1);
-insert into learning_track_labs (learning_track_id, lab_id) values (3,3);  
-insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
-  ('TypeScript Basics','Learn the basics of TypeScript.',90,0,1);
-insert into learning_track_labs (learning_track_id, lab_id) values (4,4);  
-insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
-  ('React Basics','Learn the basics of React.',90,0,1);
-insert into learning_track_labs (learning_track_id, lab_id) values (5,5);  
-insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
-  ('Next.JS Basics','Learn the basics of Next.JS.',90,0,1);
-insert into learning_track_labs (learning_track_id, lab_id) values (6,6);  
-insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
-  ('Bootstrap Basics','Learn the basics of Bootstrap.',90,0,1);
-insert into learning_track_labs (learning_track_id, lab_id) values (7,7);  
-insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
-  ('Angular Basics','Learn the basics of Angular.',90,0,1);
-insert into learning_track_labs (learning_track_id, lab_id) values (8,8);  
-insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
-  ('Vue Basics','Learn the basics of Vue.',90,0,1);
-insert into learning_track_labs (learning_track_id, lab_id) values (9,9);
-insert into lab(name, description, estimated_time_min, difficulty_level, sequence) values 
-  ('HTML Advanced','Learn advanced HTML topics.',60,0,2);
-insert into learning_track_labs (learning_track_id, lab_id) values (1,10);
 
---- also add css basic lab to html  track
-insert into learning_track_labs (learning_track_id, lab_id) values (1,2);
+insert into badge (name, title, icon ) values ('Contributor','🟧 Contributor','Code-fork');
+insert into badge (name, title, icon ) values ('Leader','🟨 Leader','Crown');
 
-insert into learning_track_profiles (learning_track_id, profile_id) values (1,1);
-insert into learning_track_profiles (learning_track_id, profile_id) values (1,3);
-insert into learning_track_profiles (learning_track_id, profile_id) values (2,1);
-insert into learning_track_profiles (learning_track_id, profile_id) values (2,3);
+insert into badge (name, title, icon ) values ('Streak Master','🔥 Streak Master','Flame');
+insert into badge (name, title, icon ) values ('Fast Climber','🏅 Fast Climber','Zap');
+insert into badge (name, title, icon ) values ('Super Contributor','🚀 Super Contributor','');
+insert into badge (name, title, icon ) values ('Top 5% Performer','🌟 Top 5% Performer','');
 
+insert into user_badges (user_id,badge_id,earnedAt) values (1,1,'1/4/2025');
+--insert into user_badges (user_id,badge_id,awardedAt) values (1,2,'5/15/2025');
+--insert into user_badges (user_id,badge_id,awardedAt) values (1,3,'6/11/2025');
+--insert into user_badges (user_id,badge_id,awardedAt) values (1,4,'7/24/2025');
+--insert into user_badges (user_id,badge_id,awardedAt) values (1,5,'8/01/2025');
+--insert into user_badges (user_id,badge_id,awardedAt) values (1,6,'9/13/2025');
+--insert into user_badges (user_id,badge_id,awardedAt) values (1,7,'10/02/2025');
 
--- enroll user 1 in HTML and TypeScript tracks
-insert into user_tracks (user_id, learning_track_id, enrolled ) values (1,1,true);
-insert into user_tracks (user_id, learning_track_id, enrolled ) values (1,4,true);
--- entry for user lab progress
-insert into user_lab_progress (user_id, track_id, lab_id, completed, start_date, completed_at) values (1,1,1,true, CURRENT_DATE-9, CURRENT_DATE-7);
-insert into user_lab_progress (user_id, track_id, lab_id, completed, start_date, completed_at) values (1,1,2,false, CURRENT_DATE-6, null);
---insert into user_lab_progress (user_id, track_id, lab_id, completed, start_date, completed_at) values (1,1,10,false, null, null);
---insert into user_lab_progress (user_id, track_id, lab_id, completed, start_date, completed_at) values (1,4,4,false, CURRENT_DATE-2, null);
--- alter sequence profile_seq restart with 4;
-
-
+ 
+alter sequence Activity_id_seq restart with 20;
+alter sequence domain_id_seq restart with 20;
+alter sequence journey_id_seq restart with 20;
+alter sequence stage_id_seq restart with 20;
+alter sequence milestone_id_seq restart with 20; 
+alter sequence user_progress_id_seq restart with 20; 

@@ -2,6 +2,8 @@ package org.nextgen.service;
 
 
 import java.util.List;
+import java.util.UUID;
+
 import jakarta.enterprise.context.ApplicationScoped;
 
 import org.nextgen.model.Domain;
@@ -13,11 +15,11 @@ public class DomainService {
         return Domain.listAll();
     }
 
-    public Domain getDomainById(Long id) {
+    public Domain getDomainById(UUID id) {
         return Domain.findById(id);
     }
 
-    public Domain updateDomain(Long id, String name, String description, String community) {
+    public Domain updateDomain(UUID id, String name, String description, String community) {
         Domain domain = Domain.findById(id);
         if (domain != null) {
             domain.name = name;
@@ -34,7 +36,7 @@ public class DomainService {
         return deleted ? id : null;
     }*/
 
-    public Domain deleteDomainEntity(Long id) {
+    public Domain deleteDomainEntity(UUID id) {
         Domain domain = Domain.findById(id);
         if (domain != null) {
             domain.delete();

@@ -7,7 +7,8 @@ import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.util.List;;
+import java.util.List;
+import java.util.UUID;;
 
 
 /**
@@ -42,13 +43,13 @@ public class UserProgress extends BaseProgress  {
     public ITProfessional user;
 
 
-    public static UserProgress findLastUserProgress(Long userId) {        
+    public static UserProgress findLastUserProgress(UUID userId) {        
         String query = "user.id = ?1 order by id desc";
         return find(query,userId)
                 .firstResult();
     }
 
-    public static UserProgress getLastUserProgressByStatus(Long userId, String status) {        
+    public static UserProgress getLastUserProgressByStatus(UUID userId, String status) {        
         String query = "user.id = ?1 AND status = ?2 order by id desc";
         return find(query,userId, status)
                 .firstResult();
@@ -61,7 +62,7 @@ public class UserProgress extends BaseProgress  {
      * @param activityName The name of the Activity.
      * @return List of matching UserProgress records.
      */
-    public static List<UserProgress> findByUserIdAndActivityName(Long userId, String activityName) {
+    public static List<UserProgress> findByUserIdAndActivityName(UUID userId, String activityName) {
         // JPQL Query explanation:
         // 1. SELECT up: Select the UserProgress entity.
         // 2. JOIN up.milestone m: Traverse from UserProgress to Milestone.
@@ -83,7 +84,7 @@ public class UserProgress extends BaseProgress  {
      * @param activityName The name of the Activity.
      * @return List of matching UserProgress records.
      */
-    public static UserProgress findLastByUserIdAndActivityName(Long userId, String activityName) {
+    public static UserProgress findLastByUserIdAndActivityName(UUID userId, String activityName) {
         // JPQL Query explanation:
         // 1. SELECT up: Select the UserProgress entity.
         // 2. JOIN up.milestone m: Traverse from UserProgress to Milestone.
@@ -106,7 +107,7 @@ public class UserProgress extends BaseProgress  {
      * @param activityName The name of the Activity.
      * @return The total count of matching UserProgress records (as a Long).
      */
-    public static Long countByUserIdAndActivityName(Long userId, String activityName) {
+    public static Long countByUserIdAndActivityName(UUID userId, String activityName) {
         // JPQL Query explanation:
         // 1. SELECT coun(up:) Select the count of UserProgress entity.
         // 2. JOIN up.milestone m: Traverse from UserProgress to Milestone.
