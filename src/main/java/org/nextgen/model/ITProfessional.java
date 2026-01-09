@@ -24,6 +24,12 @@ public class ITProfessional extends BaseEntity {
     public Stage stage;
     @ManyToOne
     public Profile profile;
+
+    public String fullName;
+    public String photoUrl;
+    public String headline;
+    public String location;
+    public String bio;
     
     @ManyToMany
     @JoinTable(

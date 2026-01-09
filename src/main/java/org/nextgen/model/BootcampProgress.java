@@ -9,14 +9,18 @@ import jakarta.persistence.Table;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapKeyColumn;
+import jakarta.persistence.OneToMany;
 
 import java.time.Instant;
 import java.util.Map;
+import java.util.UUID;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Entity
 @Table(name = "bootcamp_progress")
-public class BootcampProgress extends BaseEntity {
+public class BootcampProgress extends BaseProgress {
 
     // Relation to the bootcamp start event
     @ManyToOne(optional = false)
@@ -24,18 +28,19 @@ public class BootcampProgress extends BaseEntity {
     public BootcampStart bootcampStart;
 
     // Track layer progress
-    @ElementCollection
-    @CollectionTable(name = "layer_progress", joinColumns = @JoinColumn(name = "progress_id"))
-    @MapKeyColumn(name = "layer_name")
-    @Column(name = "completed")
-    public Map<String, Boolean> layersCompleted = new HashMap<>();
+    @OneToMany(mappedBy = "bootcampProgress")
+    public List<LayerProgress> completedLayers = new ArrayList<>();
 
     // Track module progress
+    @OneToMany(mappedBy = "bootcampProgress")
+    public List<ModuleProgress> completedModules = new ArrayList<>();
+
+    /* 
     @ElementCollection
     @CollectionTable(name = "module_progress", joinColumns = @JoinColumn(name = "progress_id"))
     @MapKeyColumn(name = "module_id")
     @Column(name = "completed")
-    public Map<String, Boolean> modulesCompleted = new HashMap<>();
+    public Map<String, Boolean> modulesCompleted = new HashMap<>();*/
 
     // Track quiz scores per module
     @ElementCollection
@@ -60,15 +65,52 @@ public class BootcampProgress extends BaseEntity {
     public Instant completedAt;
 
     public void updateProgress() {
-        int total = modulesCompleted.size();
+        int total = completedModules.size();
         if (total > 0) {
-            long done = modulesCompleted.values().stream().filter(v -> v).count();
+            long done = completedModules.stream()
+                                        .filter(mp -> mp.completed)
+                                        .count();
             this.progressPercentage = (int) ((done * 100.0) / total);
         }
     }
 
-    public void markModuleComplete(String moduleId) {
-        modulesCompleted.put(moduleId, true);
+    public void initializeLayer(UUID layerId) {
+        LayerProgress layerProgress = new LayerProgress();
+        layerProgress.layer = Layer.findById(layerId);
+        layerProgress.bootcampProgress = this;
+        completedLayers.add(layerProgress);
+        layerProgress.completed = false;
+        layerProgress.persist();
+        
+        layerProgress.layer.modules.forEach(module -> {
+            initializeModule(module.id, layerProgress);
+        });
+    }
+
+    public void markLayerComplete(UUID layerId) {
+        for (LayerProgress lp : completedLayers) {
+            if (lp.layer.id.equals(layerId)) {
+                lp.completed = true;
+                lp.persist();
+                break;
+            }
+        }
+    }
+
+    public void initializeModule(UUID moduleId, LayerProgress layerProgress) {
+        ModuleProgress moduleProgress = new ModuleProgress();
+        moduleProgress.module = Module.findById(moduleId);  
+        moduleProgress.bootcampProgress = this;
+        moduleProgress.layerProgress = layerProgress;
+        completedModules.add(moduleProgress);
+        moduleProgress.completed = false;
+        moduleProgress.persist();  
+    }
+
+    public void markModuleComplete(UUID moduleProgressId) {
+        ModuleProgress moduleProgress = ModuleProgress.findById(moduleProgressId);  
+        moduleProgress.completed = true;
+        moduleProgress.persist();
         updateProgress();
     }
 
@@ -80,12 +122,11 @@ public class BootcampProgress extends BaseEntity {
         quizScores.put(moduleId, score);
     }
 
-    public void markLayerComplete(String layerName) {
-        layersCompleted.put(layerName, true);
-    }
 
     public void completeBootcamp() {
         this.progressPercentage = 100;
         this.completedAt = Instant.now();
     }
 }
+
+

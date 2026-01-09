@@ -12,7 +12,7 @@ import java.util.List;
 
 
 @Entity
-public class Module extends BaseEntity{
+public class Module extends BaseRewardable {
     public String moduleId;   // C1, C2, P1, X1
     public String name;
     public String description;

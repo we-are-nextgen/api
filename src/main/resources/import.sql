@@ -693,13 +693,16 @@ target_profile AS (
     FROM profile
     WHERE name = 'Frontend Developer'
 )
-INSERT INTO itprofessional (id, userid, domain_id, stage_id, profile_id)
+INSERT INTO itprofessional (id, userid, domain_id, stage_id, profile_id,fullname,bio,headline)
 SELECT
     gen_random_uuid(),
     'waelibrahim2000@hotmail.com',
     d.id,
     s.id,
-    p.id
+    p.id,
+    'Wael Ibrahim',
+    'Passionate IT Professional with a focus on frontend development. Eager to learn and contribute to impactful projects.',
+    'Aspiring Frontend Developer | IT Professional'
 FROM target_domain d
 JOIN target_stage s ON TRUE
 JOIN target_profile p ON TRUE;
@@ -773,7 +776,7 @@ JOIN current_milestone cm ON TRUE
 JOIN next_milestone nm ON TRUE;
 
 -- add another user
-
+-- Ezz Eldin
 WITH target_domain AS (
     SELECT id
     FROM domain
@@ -791,16 +794,53 @@ target_profile AS (
     FROM profile
     WHERE name = 'Backend Developer'
 )
-INSERT INTO itprofessional (id, userid, domain_id, stage_id, profile_id)
+INSERT INTO itprofessional (id, userid, domain_id, stage_id, profile_id,fullname,bio,headline)
 SELECT
     gen_random_uuid(),
-    'test@test.com',
+    'ezz@hotmail.com',
     d.id,
     s.id,
-    p.id
+    p.id,
+    'Ezz Eldin',
+    'Backend Developer with a passion for building scalable applications and services.',
+    'Backend Developer | Cloud Enthusiast'
 FROM target_domain d
 JOIN target_stage s ON TRUE
 JOIN target_profile p ON TRUE;
+
+-- create another user
+-- Yassine El Fahmah
+WITH target_domain AS (
+    SELECT id
+    FROM domain
+    WHERE name = 'Cloud, DevOps & Infrastructure'
+),
+target_stage AS (
+    SELECT s.id
+    FROM stage s
+    JOIN journey j on j.id=s.journey_id
+    WHERE s.name = 'Practice'
+    AND j.name = 'IT Professional'
+),
+target_profile AS (
+    SELECT id
+    FROM profile
+    WHERE name = 'Backend Developer'
+)
+INSERT INTO itprofessional (id, userid, domain_id, stage_id, profile_id,fullname,bio,headline)
+SELECT
+    gen_random_uuid(),
+    'yassine@hotmail.com',
+    d.id,
+    s.id,
+    p.id,
+    'Yassin El Fahmah',
+    'Backend Developer with a passion for building scalable applications and services.',
+    'Backend Developer | Cloud Enthusiast'
+FROM target_domain d
+JOIN target_stage s ON TRUE
+JOIN target_profile p ON TRUE;
+
 
 -- create Team
 WITH admin_user AS (

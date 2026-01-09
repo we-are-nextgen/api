@@ -120,8 +120,20 @@ public class BootcampController {
     public org.nextgen.dto.bootcamp.UserBootcampDTO getUserBootcamp(
             @PathParam("userBootcampId") UUID userBootcampId
     ){
-        System.out.println(userBootcampId);
         return bootcampService.getUserBootcamp(userBootcampId);
+        
+    }
+    
+
+    // ==========================
+    // Bootcamp Progress Methods  | 
+    // ==========================
+    @POST
+    @Path("/userbootcamp/progress/{bootcampStartId}")
+    public BootcampStart bootcampProgress(
+            @PathParam("bootcampStartId") UUID bootcampStartId
+    ){
+        return bootcampService.bootcampProgress(bootcampStartId);
         
     }
     

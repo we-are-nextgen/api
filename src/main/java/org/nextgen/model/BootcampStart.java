@@ -7,6 +7,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.UUID;
@@ -34,6 +35,10 @@ public class BootcampStart extends BaseEntity {
     // Optional: allow "enrollment metadata"
     @Column(name ="cohort_name")
     public String cohortName;
+
+    @OneToMany(mappedBy = "bootcampStart")
+    @JsonbTransient
+    public java.util.List<UserBootcamp> userBootcamps;
 
     public enum STATUS {
         OPEN_FOR_ENROLLMENT,

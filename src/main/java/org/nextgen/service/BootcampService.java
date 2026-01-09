@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.nextgen.dto.BootcampEnrollmentCheckDTO;
 import org.nextgen.dto.UserBootcampDTO;
 import org.nextgen.model.Bootcamp;
+import org.nextgen.model.BootcampProgress;
 import org.nextgen.model.BootcampStart;
 import org.nextgen.model.ITProfessional;
 import org.nextgen.model.UserBootcamp;
@@ -67,7 +68,7 @@ public class BootcampService {
     public List<Bootcamp> getBootcampsStartingWithin(Long weeks) {
         LocalDate today = LocalDate.now();
         LocalDate twoMonthsLater = today.plusWeeks(weeks);
-
+        
         return Bootcamp.find(
             "expectedStartDate BETWEEN ?1 AND ?2",
             today,
@@ -160,9 +161,16 @@ public class BootcampService {
             from UserBootcamp ub
             join fetch ub.bootcampStart bs
             join fetch bs.bootcamp
+            join fetch bs.userBootcamps ub2
+            join fetch ub2.user
             where ub.id = ?1
         """, userBootcampId).singleResult();
-        return org.nextgen.dto.bootcamp.UserBootcampDTO.tDto(userBootcamp);
+        BootcampProgress progress = BootcampProgress.find("bootcampStart.id", userBootcamp.bootcampStart.id).firstResult();
+        return org.nextgen.dto.bootcamp.UserBootcampDTO.tDto(userBootcamp,progress);
+    }
+
+    public BootcampProgress getBootcampProgress(UUID bootcampStartId){
+        return BootcampProgress.find("bootcampStart.id", bootcampStartId).firstResult();
     }
 
     // ==========================
@@ -194,6 +202,23 @@ public class BootcampService {
         return userBootcamp;
     }
 
+    @Transactional
+    public BootcampStart bootcampProgress(UUID bootcampStartId){
+        BootcampProgress progress = BootcampProgress.find("bootcampStart.id", bootcampStartId).firstResult();
+        if (progress == null){
+            BootcampProgress newProgress = new BootcampProgress();
+            BootcampStart bootcampStart = BootcampStart.findById(bootcampStartId);
+            newProgress.bootcampStart = bootcampStart;
+            newProgress.persist();
+            bootcampStart.bootcamp.layers.forEach(layer -> {
+                newProgress.initializeLayer(layer.id);
+            });
+            
+        } else {
+            // update existing progress logic if needed
+        }
+        return BootcampStart.findById(bootcampStartId);
+    }
    
     
 }
