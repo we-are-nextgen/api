@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -28,6 +29,10 @@ public class BootcampStart extends BaseEntity {
     @JoinColumn(name = "user_id")
     public ITProfessional user;
 
+    @OneToMany(mappedBy = "bootcampStart")
+    @JsonbTransient
+    public List<BootcampProgress> bootcampProgress;
+
     // Timestamp of when the bootcamp is started
     @Column(nullable = false, name="started_at")
     public Instant startedAt = Instant.now();
@@ -38,7 +43,7 @@ public class BootcampStart extends BaseEntity {
 
     @OneToMany(mappedBy = "bootcampStart")
     @JsonbTransient
-    public java.util.List<UserBootcamp> userBootcamps;
+    public List<UserBootcamp> userBootcamps;
 
     public enum STATUS {
         OPEN_FOR_ENROLLMENT,
@@ -62,5 +67,9 @@ public class BootcampStart extends BaseEntity {
         s.status = STATUS.OPEN_FOR_ENROLLMENT;
         s.persist();
         return s;
+    }
+
+    public static BootcampStart findByBootcampId(UUID bootcampId) {
+        return find("bootcamp.id", bootcampId).firstResult();
     }
 }

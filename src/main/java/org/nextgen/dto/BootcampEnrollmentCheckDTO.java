@@ -12,6 +12,8 @@ public class BootcampEnrollmentCheckDTO {
     public Long numberOfApplicants;
     public boolean amIEnrolled;
     public UUID userBootcampId;
+    
+    public BootcampEnrollmentCheckDTO() {}
 
     BootcampEnrollmentCheckDTO (
                                 UUID id,

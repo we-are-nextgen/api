@@ -116,7 +116,7 @@ public class BootcampService {
 
 
     public Optional<BootcampEnrollmentCheckDTO> isBootcampReadyForEnrollment(UUID id, String email){
-        List<BootcampEnrollmentCheckDTO> result = em.createQuery("""
+        /*List<BootcampEnrollmentCheckDTO> result = em.createQuery("""
             SELECT new org.nextgen.dto.BootcampEnrollmentCheckDTO(
                 b.id,
                 bs.id,
@@ -133,8 +133,34 @@ public class BootcampService {
         """, BootcampEnrollmentCheckDTO.class)
         .setParameter("bootcampId", id)
         .setParameter("status", BootcampStart.STATUS.OPEN_FOR_ENROLLMENT)
+        .getResultList();*/
+        List<BootcampEnrollmentCheckDTO> result = em.createQuery("""
+            SELECT new org.nextgen.dto.BootcampEnrollmentCheckDTO(
+                b.id,
+                bs.id,
+                bs.status,
+                b.capacity,
+                COUNT(ub.id)
+            )
+            FROM BootcampStart bs
+            JOIN bs.bootcamp b
+            LEFT JOIN UserBootcamp ub ON ub.bootcampStart = bs
+            WHERE b.id = :bootcampId
+            GROUP BY b.id, bs.id, b.capacity, bs.status
+        """, BootcampEnrollmentCheckDTO.class)
+        .setParameter("bootcampId", id)
         .getResultList();
         // check if user already enrolled 
+        BootcampEnrollmentCheckDTO dto = result.stream().findFirst().orElseGet(BootcampEnrollmentCheckDTO::new); 
+        
+        ITProfessional user = ITProfessional.getUserByEmail(email);
+        BootcampStart bootcampStart = BootcampStart.findByBootcampId(id);
+        UserBootcamp userBootcamp = UserBootcamp.findByUserAndBootcampStart(bootcampStart, user);
+        dto.amIEnrolled=(userBootcamp != null);
+        dto.userBootcampId = (userBootcamp != null)?userBootcamp.id:null;
+        return Optional.of(dto);
+
+        /*
         Optional<BootcampEnrollmentCheckDTO> bootcampEnrollmentCheckDTO = result.stream().findFirst();
         if(!bootcampEnrollmentCheckDTO.isEmpty()) {
             bootcampEnrollmentCheckDTO.ifPresent(dto -> 
@@ -147,7 +173,7 @@ public class BootcampService {
                 }
             );
         }
-        return bootcampEnrollmentCheckDTO;
+        return bootcampEnrollmentCheckDTO; */
     }
 
      /**
