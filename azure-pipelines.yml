@@ -20,10 +20,14 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: Docker@2
-      displayName: Build an image
+    - task: Maven@4
+      displayName: Build Quarkus application
       inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/src/main/docker/Dockerfile.jvm'
-        tags: |
-          $(tag)
+        mavenPomFile: 'pom.xml'
+        goals: 'package'
+        options: '-DskipTests'
+        jdkVersionOption: '1.21'
+    - script: |
+        docker build -f src/main/docker/Dockerfile.jvm -t api:$(tag) .
+      displayName: Build Docker image
+      workingDirectory: '$(Build.SourcesDirectory)'
