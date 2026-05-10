@@ -13,6 +13,7 @@ variables:
   dockerRegistryServiceConnection: 'f4c5c3b1-ef89-4fad-b1c7-0dfcb7672f18'
   imageRepository: 'wearenextgenapi'
   containerRegistry: 'wearenextgen-amhzfvc8btfyacfb.azurecr.io'
+  acrLoginServer: 'wearenextgen-amhzfvc8btfyacfb.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/src/main/docker/Dockerfile.jvm'
   tag: '$(Build.BuildId)'
 
