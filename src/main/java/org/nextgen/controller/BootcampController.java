@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.nextgen.dto.BootcampEnrollmentCheckDTO;
+import org.nextgen.dto.ModuleWorkshopDTO;
 import org.nextgen.dto.UserBootcampDTO;
 import org.nextgen.model.Bootcamp;
 import org.nextgen.model.BootcampStart;
@@ -19,6 +20,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.Response;
 
 /**
  * Bootamp supported methods
@@ -135,6 +137,19 @@ public class BootcampController {
     ){
         return bootcampService.bootcampProgress(bootcampStartId);
         
+    }
+
+    @GET
+    @Path("/{id}/modules/{moduleId}/workshop")
+    public Response getModuleWorkshop(
+            @PathParam("id") UUID bootcampId,
+            @PathParam("moduleId") String moduleId
+    ) {
+        ModuleWorkshopDTO dto = bootcampService.resolveModuleWorkshop(bootcampId, moduleId);
+        if (dto == null || dto.workshopName == null || dto.workshopName.isBlank()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(dto).build();
     }
     
 }

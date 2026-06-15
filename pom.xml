@@ -61,6 +61,11 @@
             <artifactId>quarkus-hibernate-orm</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-rest-client-jackson</artifactId>
+        </dependency>
+
         <!-- for the web terminal implementation -->
         <dependency>
             <groupId>io.quarkus</groupId>

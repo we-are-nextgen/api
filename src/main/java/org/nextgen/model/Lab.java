@@ -57,6 +57,9 @@ public class Lab extends BaseRewardable {
     @Column(name = "has_bonus_tasks")
     public Boolean hasBonusTasks;
 
+    @Column(name = "educates_workshop_name")
+    public String educatesWorkshopName;
+
     @OneToMany(mappedBy = "lab", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     public List<Asset> assets;
 
@@ -64,6 +67,22 @@ public class Lab extends BaseRewardable {
     public List<Exercise> exercises;
 
     /* -- Model Helper Methods -- */
+
+    public static Lab findBySlug(String slug) {
+        if (slug == null || slug.isBlank()) {
+            return null;
+        }
+        Lab byUuid = find("uuid", slug).firstResult();
+        if (byUuid != null) {
+            return byUuid;
+        }
+        return find("name", slug).firstResult();
+    }
+
+    public static String resolveWorkshopName(String slug) {
+        Lab lab = findBySlug(slug);
+        return lab != null ? lab.educatesWorkshopName : null;
+    }
 
     /**
      * Executes a query to get a list of Labs and the total earned points 

@@ -8,11 +8,16 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.nextgen.dto.BootcampEnrollmentCheckDTO;
+import org.nextgen.dto.ModuleWorkshopDTO;
 import org.nextgen.dto.UserBootcampDTO;
 import org.nextgen.model.Bootcamp;
 import org.nextgen.model.BootcampProgress;
 import org.nextgen.model.BootcampStart;
+import org.nextgen.model.Component;
 import org.nextgen.model.ITProfessional;
+import org.nextgen.model.Lab;
+import org.nextgen.model.Layer;
+import org.nextgen.model.Module;
 import org.nextgen.model.UserBootcamp;
 
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
@@ -244,6 +249,54 @@ public class BootcampService {
             // update existing progress logic if needed
         }
         return BootcampStart.findById(bootcampStartId);
+    }
+
+    /**
+     * Resolve the Educates workshop name for a bootcamp module by following
+     * linkedLabs slugs or lab-type component references.
+     */
+    public ModuleWorkshopDTO resolveModuleWorkshop(UUID bootcampId, String moduleId) {
+        Bootcamp bootcamp = Bootcamp.findById(bootcampId);
+        if (bootcamp == null || bootcamp.layers == null) {
+            return null;
+        }
+
+        for (Layer layer : bootcamp.layers) {
+            if (layer.modules == null) {
+                continue;
+            }
+            for (Module module : layer.modules) {
+                if (!moduleId.equals(module.moduleId)) {
+                    continue;
+                }
+
+                ModuleWorkshopDTO dto = new ModuleWorkshopDTO();
+                dto.moduleId = module.moduleId;
+                dto.moduleName = module.name;
+
+                String slug = firstLabSlug(module);
+                if (slug != null) {
+                    dto.labSlug = slug;
+                    dto.workshopName = Lab.resolveWorkshopName(slug);
+                }
+                return dto;
+            }
+        }
+        return null;
+    }
+
+    private String firstLabSlug(Module module) {
+        if (module.linkedLabs != null && !module.linkedLabs.isEmpty()) {
+            return module.linkedLabs.get(0);
+        }
+        if (module.components != null) {
+            for (Component component : module.components) {
+                if ("lab".equals(component.type) && component.reference != null && !component.reference.isBlank()) {
+                    return component.reference;
+                }
+            }
+        }
+        return null;
     }
    
     

@@ -30,6 +30,7 @@ public class TrackYamlDTO {
         public boolean hasBonusTasks;
         public Integer sequence;
         public String badgeRuleValue;
+        public String educatesWorkshopName;
 
         public String contentMarkdown;
         public String contentHtml;
