@@ -19,7 +19,7 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      vmImage: ubuntu-latest
+      name: ocp-agent
     steps:
     - task: Maven@4
       displayName: Build Quarkus application
