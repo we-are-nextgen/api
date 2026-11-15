@@ -302,7 +302,7 @@ resource autoscale 'Microsoft.Insights/autoscalesettings@2022-10-01' = {
               direction: 'Increase'
               type: 'ChangeCount'
               value: '1'
-              cooldown: 'PT1M'
+              cooldown: 'PT2M'
             }
           }
           {
@@ -321,7 +321,7 @@ resource autoscale 'Microsoft.Insights/autoscalesettings@2022-10-01' = {
               direction: 'Decrease'
               type: 'ChangeCount'
               value: '1'
-              cooldown: 'PT1M'
+              cooldown: 'PT2M'
             }
           }
         ]

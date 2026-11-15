@@ -6,7 +6,7 @@ https://learn.microsoft.com/en-us/azure/templates/?utm_source=chatgpt.com
 
 Deploy an Ubuntu **Nginx VM Scale Set** behind a public Azure Load Balancer using [`ysn-azure-vmss.bicep`](ysn-azure-vmss.bicep). Test automatic scaling **2 → 3 → 4 → 3 → 2**, then remove the lab.
 
-**Configuration:** `eastus` · `Standard_D2_v4` (2 vCPUs/VM) · 2–4 instances · scale out at **CPU > 40%** · scale in at **CPU < 20%** · **2-minute** CPU averaging window · **1-minute** cooldown · 1-minute metric granularity. Azure may take additional time to evaluate rules and provision or remove VMs.
+**Configuration:** `eastus` · `Standard_D2_v4` (2 vCPUs/VM) · 2–4 instances · scale out at **CPU > 40%** · scale in at **CPU < 20%** · **2-minute** CPU averaging window · **2-minute** cooldown · 1-minute metric granularity. Azure may take additional time to evaluate rules and provision or remove VMs.
 
 **Prerequisites:** Azure CLI, access to an Azure subscription, and an SSH public key at `~/.ssh/ysn-azure.pub`. Run these commands from the folder containing the Bicep file.
 
